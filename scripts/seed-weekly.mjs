@@ -163,7 +163,7 @@ async function main() {
               start_ts: startDt.toISOString(),
               end_ts: endDt.toISOString(),
               user_name: bandName,
-              date: toYMD(startDt),
+              /* no date column in new schema */
               calendar_id: CALENDAR_ID,
             },
           ])

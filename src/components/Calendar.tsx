@@ -274,7 +274,6 @@ export default function Calendar() {
                 start_ts: startDt.toISOString(),
                 end_ts: endDt.toISOString(),
                 user_name: bandName,
-                date: toYMD(startDt),
                 calendar_id: CALENDAR_ID,
               },
             ])
@@ -355,7 +354,6 @@ export default function Calendar() {
           start_ts: start.toISOString(),
           end_ts: end.toISOString(),
           user_name: event.title,
-          date: toYMD(start),
           calendar_id: CALENDAR_ID,
         },
       ])
@@ -443,7 +441,6 @@ export default function Calendar() {
       .update({
         start_ts: newStart.toISOString(),
         end_ts: newEnd.toISOString(),
-        date: toYMD(newStart),
       })
       .eq("id", id)
       .eq("calendar_id", CALENDAR_ID)
@@ -531,7 +528,6 @@ export default function Calendar() {
       .update({
         start_ts: newStart.toISOString(),
         end_ts: newEnd.toISOString(),
-        date: toYMD(newStart),
       })
       .eq("id", id)
       .eq("calendar_id", CALENDAR_ID)
@@ -639,7 +635,6 @@ export default function Calendar() {
               .update({
                 start_ts: newStart.toISOString(),
                 end_ts: newEnd.toISOString(),
-                date: toYMD(newStart),
               })
               .eq("id", id)
               .select()
