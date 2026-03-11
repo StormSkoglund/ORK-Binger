@@ -9,9 +9,10 @@ CREATE TABLE IF NOT EXISTS bookings (
   user_name text NOT NULL,
   start_ts timestamptz NOT NULL,
   end_ts timestamptz NOT NULL,
+  calendar_id text NOT NULL DEFAULT 'default', -- tenant identifier
   created_at timestamptz DEFAULT now()
 );
 
 -- Prevent overlapping time ranges (exclusion constraint)
 ALTER TABLE public.bookings
-  ADD CONSTRAINT IF NOT EXISTS bookings_no_time_overlap EXCLUDE USING gist (tstzrange(start_ts, end_ts) WITH &&);
+  ADD CONSTRAINT IF NOT EXISTS bookings_no_time_overlap EXCLUDE USING gist (calendar_id WITH =, tstzrange(start_ts, end_ts) WITH &&);

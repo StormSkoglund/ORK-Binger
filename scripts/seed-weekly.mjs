@@ -40,6 +40,10 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// calendar id for multi-tenant projects; can be set via env var or CLI
+let CALENDAR_ID =
+  process.env.CALENDAR_ID || process.env.VITE_CALENDAR_ID || "default";
+
 const WEEKLY_TEMPLATES = [
   {
     names: "Silver Monochrome",
@@ -115,6 +119,10 @@ async function main() {
       weeks = parseInt(argv[i + 1], 10) || weeks;
       i++;
     }
+    if ((a === "--calendar" || a === "-c") && argv[i + 1]) {
+      CALENDAR_ID = argv[i + 1];
+      i++;
+    }
     if (!isNaN(Number(a)) && argv.length === 1) {
       weeks = parseInt(a, 10);
     }
@@ -130,7 +138,9 @@ async function main() {
     }
   }
 
-  console.log(`Seeding weekly schedule — ${weeks} weeks...`);
+  console.log(
+    `Seeding weekly schedule for calendar '${CALENDAR_ID}' — ${weeks} weeks...`,
+  );
   const today = new Date();
   let inserted = 0;
   let skipped = 0;
@@ -154,6 +164,7 @@ async function main() {
               end_ts: endDt.toISOString(),
               user_name: bandName,
               date: toYMD(startDt),
+              calendar_id: CALENDAR_ID,
             },
           ])
           .select()

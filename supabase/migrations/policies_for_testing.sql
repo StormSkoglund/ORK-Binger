@@ -3,8 +3,11 @@
 -- WARNING: These policies are permissive and should only be used for local/dev testing.
 
 -- 1) Ensure the table exists (run the create_bookings_table.sql first if you haven't):
--- (create_bookings_table.sql already creates the table with UNIQUE(date))
-
+-- (create_bookings_table.sql already creates the table with UNIQUE(date))-- If you have applied the multi‑tenant migration, the table now has a
+-- `calendar_id` column. The permissive testing policies shown below do **not** 
+-- filter on `calendar_id` so the front‑end can work with any calendar. In a
+-- real deployment you should either add `.eq('calendar_id', …)` to all queries
+-- or tighten the policies.
 -- 2) Enable Row Level Security (RLS)
 ALTER TABLE public.bookings ENABLE ROW LEVEL SECURITY;
 
@@ -30,8 +33,8 @@ CREATE POLICY "anon_delete_bookings" ON public.bookings
 -- Run this to verify policies were created
 SELECT policyname, cmd, qual, with_check
 FROM pg_policies
-WHERE schemaname = 'public' AND tablename = 'bookings';
-
+WHERE schemaname = 'public' AND tablename = 'bookings';-- (the policies above are intentionally wide-open for testing; they do not
+-- restrict by calendar_id.)
 -- 5) (Optional) Example insert to test from SQL
 -- INSERT INTO public.bookings (date, user_name) VALUES ('2026-02-20', 'Test User');
 

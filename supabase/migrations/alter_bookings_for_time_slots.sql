@@ -5,6 +5,8 @@
 ALTER TABLE public.bookings DROP CONSTRAINT IF EXISTS bookings_date_key;
 
 -- 2) Add start_ts/end_ts columns (timestamptz)
+--    this migration does **not** touch calendar_id; run the
+--    add_calendar_id.sql migration separately if you are enabling multi‑tenant.
 ALTER TABLE public.bookings
   ADD COLUMN IF NOT EXISTS start_ts timestamptz,
   ADD COLUMN IF NOT EXISTS end_ts timestamptz;

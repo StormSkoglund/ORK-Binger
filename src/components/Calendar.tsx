@@ -8,12 +8,29 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import Toast from "./Toast";
 
+// determine which calendar/tenant we're working with. the front end looks
+// first for a ?cal= query parameter and falls back to VITE_CALENDAR_ID env var.
+function getCalendarId(): string {
+  if (typeof window === "undefined") return "default";
+  try {
+    const url = new URL(window.location.href);
+    const qp = url.searchParams.get("cal");
+    if (qp) return qp;
+  } catch {
+    /* ignore */
+  }
+  return (import.meta.env.VITE_CALENDAR_ID as string) || "default";
+}
+
+const CALENDAR_ID = getCalendarId();
+
 type BookingRow = {
   id: string;
   user_name: string;
   // new timestamp fields for hourly scheduling
   start_ts: string; // ISO timestamp
   end_ts: string; // ISO timestamp
+  calendar_id?: string; // tenant identifier (optional when fetching)
 };
 
 type ToastItem = {
@@ -60,7 +77,12 @@ export default function Calendar() {
         .channel("public:bookings")
         .on(
           "postgres_changes",
-          { event: "*", schema: "public", table: "bookings" },
+          {
+            event: "*",
+            schema: "public",
+            table: "bookings",
+            filter: `calendar_id=eq.${CALENDAR_ID}`,
+          },
           (payload: any) => {
             const row = payload.new || payload.old;
             if (!row) return;
@@ -117,6 +139,7 @@ export default function Calendar() {
     const { data, error } = await supabase
       .from("bookings")
       .select("id,user_name,start_ts,end_ts")
+      .eq("calendar_id", CALENDAR_ID)
       .order("start_ts", { ascending: true });
     if (error) {
       console.error("Supabase loadBookings error", error);
@@ -239,7 +262,7 @@ export default function Calendar() {
 
     pushToast({
       id: `seed-start-${Date.now()}`,
-      message: `Seeding weekly schedule (${weeks} weeks)...`,
+      message: `Seeding weekly schedule (${weeks} weeks) for calendar '${CALENDAR_ID}'...`,
     });
 
     const today = new Date();
@@ -265,6 +288,7 @@ export default function Calendar() {
                 end_ts: endDt.toISOString(),
                 user_name: bandName,
                 date: toYMD(startDt),
+                calendar_id: CALENDAR_ID,
               },
             ])
             .select()
@@ -295,7 +319,7 @@ export default function Calendar() {
 
     pushToast({
       id: `seed-done-${Date.now()}`,
-      message: `Seeding finished — added ${inserted}, skipped ${skipped}, failed ${failed}.`,
+      message: `Seeding finished for '${CALENDAR_ID}' — added ${inserted}, skipped ${skipped}, failed ${failed}.`,
     });
   }
 
@@ -345,6 +369,7 @@ export default function Calendar() {
           end_ts: end.toISOString(),
           user_name: event.title,
           date: toYMD(start),
+          calendar_id: CALENDAR_ID,
         },
       ])
       .select()
@@ -434,6 +459,7 @@ export default function Calendar() {
         date: toYMD(newStart),
       })
       .eq("id", id)
+      .eq("calendar_id", CALENDAR_ID)
       .select()
       .single();
 
@@ -471,7 +497,11 @@ export default function Calendar() {
   }
 
   async function deleteBooking(id: string) {
-    const { error } = await supabase.from("bookings").delete().eq("id", id);
+    const { error } = await supabase
+      .from("bookings")
+      .delete()
+      .eq("id", id)
+      .eq("calendar_id", CALENDAR_ID);
     if (error) {
       console.error("Delete failed", error);
       alert("Failed to cancel booking");
@@ -517,6 +547,7 @@ export default function Calendar() {
         date: toYMD(newStart),
       })
       .eq("id", id)
+      .eq("calendar_id", CALENDAR_ID)
       .select()
       .single();
 
@@ -546,7 +577,11 @@ export default function Calendar() {
   async function undoDeleteBooking(id: string) {
     // Undo for simplicity will delete the existing row if called after reschedule/insert —
     // here we'll attempt to delete the booking (acts as "undo" of create/reschedule)
-    const { error } = await supabase.from("bookings").delete().eq("id", id);
+    const { error } = await supabase
+      .from("bookings")
+      .delete()
+      .eq("id", id)
+      .eq("calendar_id", CALENDAR_ID);
     if (error) {
       console.error("Undo delete failed", error);
       alert("Undo failed");
