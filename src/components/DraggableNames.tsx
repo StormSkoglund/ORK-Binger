@@ -15,21 +15,9 @@ const NAME_MAP: Record<string, string[]> = {
     "Storm Valley",
     "Tommy Cash",
   ],
-  musikkbinge1: [
-    "Band A",
-    "Band B",
-    "Band C",
-  ],
-  musikkbinge2: [
-    "Group X",
-    "Group Y",
-    "Group Z",
-  ],
-  musikkbinge3: [
-    "Ensemble 1",
-    "Ensemble 2",
-    "Ensemble 3",
-  ],
+  musikkbinge1: ["Band A", "Band B", "Band C"],
+  musikkbinge2: ["Group X", "Group Y", "Group Z"],
+  musikkbinge3: ["Ensemble 1", "Ensemble 2", "Ensemble 3"],
 };
 
 export default function DraggableNames() {
