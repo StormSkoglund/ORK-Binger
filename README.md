@@ -76,6 +76,10 @@ published folder so that accessing `/admin` works correctly.
 
 ## Behavior
 
+- Landing page now provides links for multiple rooms/call them "musikkbinge".
+  visit `/musikkbinge1`, `/musikkbinge2`, or `/musikkbinge3` (or use
+  `?cal=musikkbinge1` query parameter) to open a specific calendar.
+
 - Drag a name from the left column onto a date to create a booking.
 - Client prevents visible double-booking; the DB has a UNIQUE constraint to prevent race-condition double-booking.
 - If DB rejects the insert, the UI removes the calendar event and shows an error.

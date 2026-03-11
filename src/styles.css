@@ -186,6 +186,29 @@ small {
   font-weight: 900;
 }
 
+/* landing page */
+.landing-container {
+  text-align: center;
+  padding: 40px;
+}
+.landing-container .room-list {
+  list-style: none;
+  padding: 0;
+  display: inline-block;
+  text-align: left;
+}
+.landing-container .room-list li {
+  margin: 8px 0;
+}
+.landing-container a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: bold;
+}
+.landing-container a:hover {
+  text-decoration: underline;
+}
+
 /* Toasts */
 .toast-viewport {
   position: fixed;

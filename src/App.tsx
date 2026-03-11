@@ -1,7 +1,18 @@
 import DraggableNames from "./components/DraggableNames";
 import Calendar from "./components/Calendar";
+import Landing from "./components/Landing";
 
 export default function App() {
+  // show landing page when at root path
+  const path =
+    typeof window !== "undefined"
+      ? window.location.pathname.replace(/\/+$/, "")
+      : "";
+
+  if (path === "" || path === "/") {
+    return <Landing />;
+  }
+
   return (
     <div className="app-container">
       <h1>

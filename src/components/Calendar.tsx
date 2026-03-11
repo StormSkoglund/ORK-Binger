@@ -8,21 +8,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import Toast from "./Toast";
 
-// determine which calendar/tenant we're working with. the front end looks
-// first for a ?cal= query parameter and falls back to VITE_CALENDAR_ID env var.
-function getCalendarId(): string {
-  if (typeof window === "undefined") return "default";
-  try {
-    const url = new URL(window.location.href);
-    const qp = url.searchParams.get("cal");
-    if (qp) return qp;
-  } catch {
-    /* ignore */
-  }
-  return (import.meta.env.VITE_CALENDAR_ID as string) || "default";
-}
-
-const CALENDAR_ID = getCalendarId();
+// calendar id helper is now shared; import from util module
+import { CALENDAR_ID } from "../lib/calendar";
 
 type BookingRow = {
   id: string;
