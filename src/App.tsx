@@ -3,13 +3,17 @@ import Calendar from "./components/Calendar";
 import Landing from "./components/Landing";
 
 export default function App() {
-  // show landing page when at root path
+  // show landing page when at root path **only if no calendar query**
   const path =
     typeof window !== "undefined"
       ? window.location.pathname.replace(/\/+$/, "")
       : "";
+  const hasCalParam =
+    typeof window !== "undefined"
+      ? new URL(window.location.href).searchParams.has("cal")
+      : false;
 
-  if (path === "" || path === "/") {
+  if ((path === "" || path === "/") && !hasCalParam) {
     return <Landing />;
   }
 
