@@ -1,9 +1,11 @@
-import React from "react";
-
 export default function Landing() {
   return (
     <div className="landing-container">
-      <h1>Velg Musikkbinge</h1>
+      <h1>BOOKINGSYSTEM - MUSIKKBINGENE OS</h1>
+      <p>
+        Velkommen til bookingsystemet for musikkbingene i Os. Klikk på den
+        bingen du ønsker å booke, for å navigere til bookingkalenderen.
+      </p>
       <ul className="room-list">
         <li>
           <a href="/musikkbinge1">Musikkbinge 1</a>
@@ -15,10 +17,9 @@ export default function Landing() {
           <a href="/musikkbinge3">Musikkbinge 3</a>
         </li>
       </ul>
-      <p>
-        Alternativt kan du legge til <code>?cal=musikkbinge1</code> (eller
-        musikkbinge2/musikkbinge3) etter URLen for å velge direkte.
-      </p>
+      <footer className="app-footer" role="contentinfo">
+        <small>© {new Date().getFullYear()} Alex Storm Skoglund</small>
+      </footer>
     </div>
   );
 }

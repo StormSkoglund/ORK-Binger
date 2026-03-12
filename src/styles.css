@@ -18,7 +18,7 @@
 }
 body {
   margin: 0;
-  background: #fafafa;
+  background: #c0dbea94;
   color: #111;
 }
 .app-container {
@@ -47,7 +47,7 @@ body {
 
 /* default external item styling (applies on all viewports) */
 .fc-external {
-  background: linear-gradient(180deg, goldenrod, gold);
+  background: linear-gradient(180deg, silver, grey);
   box-shadow: 0px 1px 0px 2.5px;
   border-radius: 6px;
   padding: 8px 10px;
@@ -166,11 +166,12 @@ body.is-dragging {
 
 h1 {
   margin: 0 0 12px 0;
-  background-color: goldenrod;
-  box-shadow: 0px 2px 0px 5px;
+  background-color: silver;
+  box-shadow: 0px 2px 0px 5px rgb(18, 13, 13);
   border-radius: 5px;
   text-align: center;
   padding: 10px 0px 10px 0px;
+  color: rgb(34, 44, 44);
 }
 
 /* emoji groups inside the H1 — hide on small screens */
@@ -188,8 +189,16 @@ small {
 
 /* landing page */
 .landing-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* fill viewport so footer can be pushed down */
   text-align: center;
   padding: 40px;
+}
+
+/* push footer to bottom of landing page */
+.landing-container .app-footer {
+  margin-top: auto;
 }
 .landing-container .room-list {
   list-style: none;
