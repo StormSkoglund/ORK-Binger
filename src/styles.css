@@ -240,6 +240,23 @@ small {
   text-align: center;
 }
 
+@media (max-width: 720px) {
+  .landing-container .room-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .landing-container .room-list li {
+    margin: 0;
+    width: calc(50% - 0.75rem);
+    min-width: 130px;
+  }
+}
+
 .landing-container .room-list li:hover {
   box-shadow: 0px 0.5px 0px 3px rgb(18, 13, 13);
   transition: 200ms;
