@@ -41,6 +41,14 @@ export default function App() {
         <span className="h1-emoji" aria-hidden="true"></span>
       </h1>
 
+      {(path !== "" && path !== "/") || hasCalParam ? (
+        <div className="back-to-landing">
+          <a className="btn" href="/">
+            ← Tilbake til oversikt
+          </a>
+        </div>
+      ) : null}
+
       <div className="layout">
         <DraggableNames />
         <Calendar />

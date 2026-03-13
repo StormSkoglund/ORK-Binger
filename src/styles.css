@@ -395,6 +395,17 @@ small {
   font-size: 13px;
 }
 
+.back-to-landing {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 16px;
+}
+
+.back-to-landing .btn {
+  padding: 8px 14px;
+  font-size: 0.95rem;
+}
+
 .app-footer {
   margin-top: 20px;
   text-align: center;
