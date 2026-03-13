@@ -165,6 +165,24 @@ body.is-dragging {
   height: 100%;
 }
 
+/* Ensure event titles wrap so band names remain visible in narrow time slots */
+.fc .fc-event, .fc .fc-event-main {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.fc .fc-event-title,
+.fc .fc-event-time {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Make the event text a bit smaller so it fits better in narrow blocks */
+.fc .fc-event {
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
 h1 {
   margin: 0 0 12px 0;
   background-color: silver;
