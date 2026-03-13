@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 
 type BookingRow = {
@@ -33,7 +33,7 @@ function formatDateTime(iso: string) {
 
 function makeMessage(eventType: string, row: BookingRow) {
   const room = calendarLabel(row.calendar_id);
-  const name = row.user_name || "Ukjent"
+  const name = row.user_name || "Ukjent";
   const start = formatDateTime(row.start_ts);
   const end = formatDateTime(row.end_ts);
 
@@ -135,7 +135,9 @@ export default function NewsFeed() {
         ) : (
           feedItems.map((item) => (
             <li key={item.id} className="news-feed-item">
-              <span className="news-feed-time">{formatDateTime(item.time)}</span>
+              <span className="news-feed-time">
+                {formatDateTime(item.time)}
+              </span>
               <span className="news-feed-message">{item.message}</span>
             </li>
           ))
