@@ -18,7 +18,8 @@
 }
 body {
   margin: 0;
-  background: #fafafa;
+  /* A soft neutral background that works well with silver cards and dark text */
+  background: #f3f4f6;
   color: #111;
 }
 .app-container {
@@ -47,7 +48,7 @@ body {
 
 /* default external item styling (applies on all viewports) */
 .fc-external {
-  background: linear-gradient(180deg, goldenrod, gold);
+  background: linear-gradient(180deg, silver, grey);
   box-shadow: 0px 1px 0px 2.5px;
   border-radius: 6px;
   padding: 8px 10px;
@@ -164,13 +165,32 @@ body.is-dragging {
   height: 100%;
 }
 
+/* Ensure event titles wrap so band names remain visible in narrow time slots */
+.fc .fc-event, .fc .fc-event-main {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.fc .fc-event-title,
+.fc .fc-event-time {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Make the event text a bit smaller so it fits better in narrow blocks */
+.fc .fc-event {
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
 h1 {
   margin: 0 0 12px 0;
-  background-color: goldenrod;
-  box-shadow: 0px 2px 0px 5px;
+  background-color: silver;
+  box-shadow: 0px 2px 0px 5px rgb(18, 13, 13);
   border-radius: 5px;
   text-align: center;
   padding: 10px 0px 10px 0px;
+  color: rgb(34, 44, 44);
 }
 
 /* emoji groups inside the H1 — hide on small screens */
@@ -184,6 +204,144 @@ h1 {
 small {
   text-align: center;
   font-weight: 900;
+}
+
+/* landing page */
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* fill viewport so footer can be pushed down */
+  text-align: center;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+@media (max-width: 720px) {
+  .landing-container {
+    padding: 24px 12px;
+  }
+
+  .landing-columns {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .landing-container .room-list {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* push footer to bottom of landing page */
+.landing-container .app-footer {
+  margin-top: auto;
+}
+.landing-container .room-list {
+  list-style: none;
+  padding: 2%;
+  background-color: whitesmoke;
+  border-radius: 15px;
+  max-width: fit-content;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  text-align: left;
+  scroll-behavior: auto;
+  box-shadow: 0 0.5px 2px rgba(2, 6, 23, 0.2);
+}
+.landing-container .room-list li {
+  margin: 8px 0;
+  padding: 1rem 1rem 1rem 1rem;
+  background-color: silver;
+  box-shadow: 0px 2px 0px 5px rgb(18, 13, 13);
+  border-radius: 5px;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .landing-container .room-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    max-width: 100%;
+  }
+
+  .landing-container .room-list li {
+    margin: 0;
+    width: calc(48% - 0.5rem);
+    min-width: 140px;
+  }
+}
+
+.landing-container .room-list li:hover {
+  box-shadow: 0px 0.5px 0px 3px rgb(18, 13, 13);
+  transition: 200ms;
+}
+
+.landing-container a {
+  color: rgb(34, 44, 44);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Landing page layout */
+.landing-columns {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.news-feed {
+  max-width: 420px;
+  width: 100%;
+  background-color: whitesmoke;
+  border-radius: 15px;
+  padding: 1rem 1rem 1rem 1rem;
+  box-shadow: 0 0.5px 2px rgba(2, 6, 23, 0.2);
+}
+
+.news-feed h3 {
+  margin: 0 0 0.6rem 0;
+}
+
+.news-feed-intro {
+  margin: 0 0 1rem 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.news-feed-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.news-feed-item {
+  padding: 0.8rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.6rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.news-feed-time {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+
+.news-feed-message {
+  display: block;
+  font-size: 0.95rem;
 }
 
 /* Toasts */
@@ -289,10 +447,25 @@ small {
   font-size: 13px;
 }
 
+.back-to-landing {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 16px;
+}
+
+.back-to-landing .btn {
+  padding: 8px 14px;
+  font-size: 0.95rem;
+}
+.back-to-landing a {
+  text-decoration: none;
+  font-weight: 400;
+}
+
 .app-footer {
   margin-top: 20px;
   text-align: center;
-  color: var(--muted);
+  color: rgb(34, 44, 44);
   padding: 10px 0;
   font-size: 13px;
 }

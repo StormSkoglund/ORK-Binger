@@ -1,24 +1,28 @@
 import React, { useEffect, useRef } from "react";
 import { Draggable } from "@fullcalendar/interaction";
+import { CALENDAR_ID } from "../lib/calendar";
 
-const NAMES = [
-  "Silver Monochrome",
-  "Young Collection",
-  "Blue Experience",
-  "Warfart",
-  "Verdiløse Menn",
-  "Dødsdau",
-  "Notörious",
-  "Storm Valley",
-  "Tommy Cash",
-  "Mads Røykenes",
-  "Grim Spencer",
-  "Jon Hægland",
-  "Who's That",
-];
+// default name lists for each room/calendar
+const NAME_MAP: Record<string, string[]> = {
+  default: [
+    "Silver Monochrome",
+    "Young Collection",
+    "Blue Experience",
+    "Warfart",
+    "Verdiløse Menn",
+    "Dødsdau",
+    "Notörious",
+    "Storm Valley",
+    "Tommy Cash",
+  ],
+  musikkbinge1: ["Band A", "Band B", "Band C"],
+  musikkbinge2: ["Group X", "Group Y", "Group Z"],
+  musikkbinge3: ["Ensemble 1", "Ensemble 2", "Ensemble 3"],
+};
 
 export default function DraggableNames() {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const NAMES = NAME_MAP[CALENDAR_ID] || NAME_MAP["default"];
 
   useEffect(() => {
     let draggable: any;

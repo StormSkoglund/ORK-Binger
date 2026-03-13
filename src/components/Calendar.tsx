@@ -8,21 +8,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import Toast from "./Toast";
 
-// determine which calendar/tenant we're working with. the front end looks
-// first for a ?cal= query parameter and falls back to VITE_CALENDAR_ID env var.
-function getCalendarId(): string {
-  if (typeof window === "undefined") return "default";
-  try {
-    const url = new URL(window.location.href);
-    const qp = url.searchParams.get("cal");
-    if (qp) return qp;
-  } catch {
-    /* ignore */
-  }
-  return (import.meta.env.VITE_CALENDAR_ID as string) || "default";
-}
-
-const CALENDAR_ID = getCalendarId();
+// calendar id helper is now shared; import from util module
+import { CALENDAR_ID } from "../lib/calendar";
 
 type BookingRow = {
   id: string;
@@ -287,7 +274,6 @@ export default function Calendar() {
                 start_ts: startDt.toISOString(),
                 end_ts: endDt.toISOString(),
                 user_name: bandName,
-                date: toYMD(startDt),
                 calendar_id: CALENDAR_ID,
               },
             ])
@@ -368,7 +354,6 @@ export default function Calendar() {
           start_ts: start.toISOString(),
           end_ts: end.toISOString(),
           user_name: event.title,
-          date: toYMD(start),
           calendar_id: CALENDAR_ID,
         },
       ])
@@ -456,7 +441,6 @@ export default function Calendar() {
       .update({
         start_ts: newStart.toISOString(),
         end_ts: newEnd.toISOString(),
-        date: toYMD(newStart),
       })
       .eq("id", id)
       .eq("calendar_id", CALENDAR_ID)
@@ -544,7 +528,6 @@ export default function Calendar() {
       .update({
         start_ts: newStart.toISOString(),
         end_ts: newEnd.toISOString(),
-        date: toYMD(newStart),
       })
       .eq("id", id)
       .eq("calendar_id", CALENDAR_ID)
@@ -617,6 +600,7 @@ export default function Calendar() {
             minute: "2-digit",
             hour12: false,
           }}
+          displayEventTime={false}
           eventTimeFormat={{
             hour: "2-digit",
             minute: "2-digit",
@@ -652,7 +636,6 @@ export default function Calendar() {
               .update({
                 start_ts: newStart.toISOString(),
                 end_ts: newEnd.toISOString(),
-                date: toYMD(newStart),
               })
               .eq("id", id)
               .select()
