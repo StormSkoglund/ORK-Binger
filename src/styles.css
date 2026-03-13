@@ -18,7 +18,8 @@
 }
 body {
   margin: 0;
-  background: #c0dbea94;
+  /* A soft neutral background that works well with silver cards and dark text */
+  background: #f3f4f6;
   color: #111;
 }
 .app-container {
