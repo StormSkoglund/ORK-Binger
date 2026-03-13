@@ -405,6 +405,10 @@ small {
   padding: 8px 14px;
   font-size: 0.95rem;
 }
+.back-to-landing a {
+  text-decoration: none;
+  font-weight: 400;
+}
 
 .app-footer {
   margin-top: 20px;
