@@ -26,7 +26,11 @@ export default function App() {
     // a human-friendly label when possible
     const match = calendarId.match(/^musikkbinge(\d+)$/i);
     if (match) {
-      appTitle = `Musikkbinge ${match[1]}`;
+      const num = parseInt(match[1], 10);
+      if (num === 1) appTitle = "Musikkbingen Søfteland";
+      else if (num === 2) appTitle = "Musikkbingen Os Sentrum";
+      else if (num === 3) appTitle = "Musikkbingen Nore Neset";
+      else appTitle = `Musikkbinge ${match[1]}`;
     } else if (!/default/i.test(calendarId)) {
       // if the id is something else, just use it verbatim (capitalized)
       appTitle = calendarId.charAt(0).toUpperCase() + calendarId.slice(1);

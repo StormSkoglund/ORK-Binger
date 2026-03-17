@@ -23,9 +23,11 @@ body {
   color: #111;
 }
 .app-container {
-  max-width: 1200px;
-  margin: 28px auto;
-  padding: 20px;
+  /* Let the layout expand more on wide screens while still capping max width */
+  width: min(96%, 1600px);
+  max-width: 1600px;
+  margin: 24px auto;
+  padding: 17px;
 }
 .layout {
   display: flex;
@@ -166,7 +168,8 @@ body.is-dragging {
 }
 
 /* Ensure event titles wrap so band names remain visible in narrow time slots */
-.fc .fc-event, .fc .fc-event-main {
+.fc .fc-event,
+.fc .fc-event-main {
   white-space: normal;
   overflow-wrap: anywhere;
 }
@@ -212,9 +215,11 @@ small {
   flex-direction: column;
   min-height: 100vh; /* fill viewport so footer can be pushed down */
   text-align: center;
-  max-width: 1040px;
+  width: min(95%, 1280px);
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 40px 20px;
+  /* Reduce overall interior spacing by ~15% for a tighter landing layout */
+  padding: 34px 17px;
 }
 
 @media (max-width: 720px) {
@@ -252,11 +257,30 @@ small {
 }
 .landing-container .room-list li {
   margin: 8px 0;
-  padding: 1rem 1rem 1rem 1rem;
   background-color: silver;
   box-shadow: 0px 2px 0px 5px rgb(18, 13, 13);
   border-radius: 5px;
+
+  /* Consistent button width on desktop, allow multiple lines for long names */
+  width: 220px;
+  max-width: 220px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Make the full item clickable by letting the link fill the li */
+.landing-container .room-list li a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
   text-align: center;
+  color: inherit;
+  text-decoration: none;
+}
+
+.landing-container .room-list li a:hover {
+  text-decoration: none;
 }
 
 @media (max-width: 720px) {
