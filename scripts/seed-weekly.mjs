@@ -44,36 +44,66 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let CALENDAR_ID =
   process.env.CALENDAR_ID || process.env.VITE_CALENDAR_ID || "default";
 
-const WEEKLY_TEMPLATES = [
-  {
-    names: "Silver Monochrome",
-    weekday: 1,
-    startTime: "18:00",
-    endTime: "22:00",
-  },
-  {
-    names: "Young Collection",
-    weekday: 2,
-    startTime: "16:00",
-    endTime: "20:00",
-  },
-  {
-    names: "Blue Experience",
-    weekday: 3,
-    startTime: "16:00",
-    endTime: "20:30",
-  },
-  {
-    names: ["Warfart", "Verdiløse Menn"],
-    weekday: 4,
-    startTime: "18:00",
-    endTime: "23:00",
-  },
-  { names: "Dødsdau", weekday: 5, startTime: "18:00", endTime: "23:00" },
-  { names: "Notörious", weekday: 6, startTime: "14:00", endTime: "18:00" },
-  { names: "Storm Valley", weekday: 6, startTime: "18:30", endTime: "23:00" },
-  { names: "Tommy Cash", weekday: 0, startTime: "18:00", endTime: "23:00" },
-];
+function getWeeklyTemplates(calendarId) {
+  const id = (calendarId || "").toLowerCase();
+
+  // Søfteland (musikkbinge1) weekly schedule from the provided image
+  if (id === "musikkbinge1" || id === "soefteland") {
+    return [
+      {
+        names: "Storm Valley",
+        weekday: 1,
+        startTime: "19:00",
+        endTime: "24:00",
+      }, // Monday
+      { names: "E39", weekday: 2, startTime: "18:00", endTime: "24:00" }, // Tuesday
+      {
+        names: "De Navnløse",
+        weekday: 4,
+        startTime: "12:00",
+        endTime: "24:00",
+      }, // Thursday
+      {
+        names: "De Navnløse",
+        weekday: 0,
+        startTime: "17:00",
+        endTime: "20:00",
+      }, // Sunday
+    ];
+  }
+
+  // Default schedule (existing behavior)
+  return [
+    {
+      names: "Silver Monochrome",
+      weekday: 1,
+      startTime: "18:00",
+      endTime: "22:00",
+    },
+    {
+      names: "Young Collection",
+      weekday: 2,
+      startTime: "16:00",
+      endTime: "20:00",
+    },
+    {
+      names: "Blue Experience",
+      weekday: 3,
+      startTime: "16:00",
+      endTime: "20:30",
+    },
+    {
+      names: ["Warfart", "Verdiløse Menn"],
+      weekday: 4,
+      startTime: "18:00",
+      endTime: "23:00",
+    },
+    { names: "Dødsdau", weekday: 5, startTime: "18:00", endTime: "23:00" },
+    { names: "Notörious", weekday: 6, startTime: "14:00", endTime: "18:00" },
+    { names: "Storm Valley", weekday: 6, startTime: "18:30", endTime: "23:00" },
+    { names: "Tommy Cash", weekday: 0, startTime: "18:00", endTime: "23:00" },
+  ];
+}
 
 function getDateForWeekday(base, weekday, weekOffset = 0) {
   const d = new Date(base);
@@ -84,9 +114,19 @@ function getDateForWeekday(base, weekday, weekOffset = 0) {
 }
 
 function setTime(dt, timeStr) {
-  const [hh, mm] = timeStr.split(":").map((n) => parseInt(n, 10));
+  const [hhStr, mmStr] = timeStr.split(":");
+  const hh = parseInt(hhStr, 10);
+  const mm = parseInt(mmStr, 10);
   const d = new Date(dt);
-  d.setHours(hh, mm, 0, 0);
+
+  // treat 24:00 as the end of day (next midnight)
+  if (hh === 24) {
+    d.setDate(d.getDate() + 1);
+    d.setHours(0, mm, 0, 0);
+  } else {
+    d.setHours(hh, mm, 0, 0);
+  }
+
   return d;
 }
 
@@ -142,12 +182,13 @@ async function main() {
     `Seeding weekly schedule for calendar '${CALENDAR_ID}' — ${weeks} weeks...`,
   );
   const today = new Date();
+  const templates = getWeeklyTemplates(CALENDAR_ID);
   let inserted = 0;
   let skipped = 0;
   let failed = 0;
 
   for (let w = 0; w < weeks; w++) {
-    for (const tpl of WEEKLY_TEMPLATES) {
+    for (const tpl of templates) {
       const bandName = Array.isArray(tpl.names)
         ? tpl.names[w % tpl.names.length]
         : tpl.names;

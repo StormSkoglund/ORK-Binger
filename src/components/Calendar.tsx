@@ -183,41 +183,72 @@ export default function Calendar() {
   }
 
   // Weekly schedule template (used by the "Seed weekly schedule" action)
-  const WEEKLY_TEMPLATES: Array<{
-    names: string | string[];
-    weekday: number; // 0=Sun .. 6=Sat
-    startTime: string; // "HH:MM"
-    endTime: string; // "HH:MM"
-  }> = [
-    {
-      names: "Silver Monochrome",
-      weekday: 1,
-      startTime: "18:00",
-      endTime: "22:00",
-    }, // Monday
-    {
-      names: "Young Collection",
-      weekday: 2,
-      startTime: "16:00",
-      endTime: "20:00",
-    }, // Tuesday
-    {
-      names: "Blue Experience",
-      weekday: 3,
-      startTime: "16:00",
-      endTime: "20:30",
-    }, // Wednesday
-    {
-      names: ["Warfart", "Verdiløse Menn"],
-      weekday: 4,
-      startTime: "18:00",
-      endTime: "23:00",
-    }, // Thursday (alternate weekly)
-    { names: "Dødsdau", weekday: 5, startTime: "18:00", endTime: "23:00" }, // Friday
-    { names: "Notörious", weekday: 6, startTime: "14:00", endTime: "18:00" }, // Saturday (early)
-    { names: "Storm Valley", weekday: 6, startTime: "18:30", endTime: "23:00" }, // Saturday (late)
-    { names: "Tommy Cash", weekday: 0, startTime: "18:00", endTime: "23:00" }, // Sunday
-  ];
+  function getWeeklyTemplates(calendarId: string) {
+    const id = (calendarId || "").toLowerCase();
+
+    // Søfteland is the primary venue with an established weekly schedule.
+    // This matches the weekly timetable shown in the provided image.
+    if (id === "musikkbinge1" || id === "soefteland") {
+      return [
+        {
+          names: "Storm Valley",
+          weekday: 1,
+          startTime: "19:00",
+          endTime: "24:00",
+        }, // Monday
+        { names: "E39", weekday: 2, startTime: "18:00", endTime: "24:00" }, // Tuesday
+        {
+          names: "De Navnløse",
+          weekday: 4,
+          startTime: "12:00",
+          endTime: "24:00",
+        }, // Thursday
+        {
+          names: "De Navnløse",
+          weekday: 0,
+          startTime: "17:00",
+          endTime: "20:00",
+        }, // Sunday
+      ];
+    }
+
+    // Default schedule for other calendars
+    return [
+      {
+        names: "Silver Monochrome",
+        weekday: 1,
+        startTime: "18:00",
+        endTime: "22:00",
+      }, // Monday
+      {
+        names: "Young Collection",
+        weekday: 2,
+        startTime: "16:00",
+        endTime: "20:00",
+      }, // Tuesday
+      {
+        names: "Blue Experience",
+        weekday: 3,
+        startTime: "16:00",
+        endTime: "20:30",
+      }, // Wednesday
+      {
+        names: ["Warfart", "Verdiløse Menn"],
+        weekday: 4,
+        startTime: "18:00",
+        endTime: "23:00",
+      }, // Thursday (alternate weekly)
+      { names: "Dødsdau", weekday: 5, startTime: "18:00", endTime: "23:00" }, // Friday
+      { names: "Notörious", weekday: 6, startTime: "14:00", endTime: "18:00" }, // Saturday (early)
+      {
+        names: "Storm Valley",
+        weekday: 6,
+        startTime: "18:30",
+        endTime: "23:00",
+      }, // Saturday (late)
+      { names: "Tommy Cash", weekday: 0, startTime: "18:00", endTime: "23:00" }, // Sunday
+    ];
+  }
 
   function getDateForWeekday(base: Date, weekday: number, weekOffset = 0) {
     const d = new Date(base);
@@ -228,9 +259,18 @@ export default function Calendar() {
   }
 
   function setTime(dt: Date, timeStr: string) {
-    const [hh, mm] = timeStr.split(":").map((n) => parseInt(n, 10));
+    const [hhStr, mmStr] = timeStr.split(":");
+    const hh = parseInt(hhStr, 10);
+    const mm = parseInt(mmStr, 10);
     const d = new Date(dt);
-    d.setHours(hh, mm, 0, 0);
+
+    // treat 24:00 as the end of the day (next midnight)
+    if (hh === 24) {
+      d.setDate(d.getDate() + 1);
+      d.setHours(0, mm, 0, 0);
+    } else {
+      d.setHours(hh, mm, 0, 0);
+    }
     return d;
   }
 
@@ -253,12 +293,13 @@ export default function Calendar() {
     });
 
     const today = new Date();
+    const templates = getWeeklyTemplates(CALENDAR_ID);
     let inserted = 0;
     let skipped = 0;
     let failed = 0;
 
     for (let w = 0; w < weeks; w++) {
-      for (const tpl of WEEKLY_TEMPLATES) {
+      for (const tpl of templates) {
         const bandName = Array.isArray(tpl.names)
           ? tpl.names[w % tpl.names.length]
           : tpl.names;

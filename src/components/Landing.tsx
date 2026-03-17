@@ -10,13 +10,13 @@ export default function Landing() {
       <div className="landing-columns">
         <ul className="room-list">
           <li>
-            <a href="/musikkbinge1">Musikkbinge 1</a>
+            <a href="/musikkbinge1">Musikkbingen Søfteland</a>
           </li>
           <li>
-            <a href="/musikkbinge2">Musikkbinge 2</a>
+            <a href="/musikkbinge2">Musikkbingen Os Sentrum</a>
           </li>
           <li>
-            <a href="/musikkbinge3">Musikkbinge 3</a>
+            <a href="/musikkbinge3">Musikkbingen Nore Neset</a>
           </li>
         </ul>
 
