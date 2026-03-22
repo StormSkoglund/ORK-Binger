@@ -47,7 +47,19 @@ let CALENDAR_ID =
 function getWeeklyTemplates(calendarId) {
   const id = (calendarId || "").toLowerCase();
 
-  // Søfteland (musikkbinge1) weekly schedule from the provided image
+  // Musikkbinge 2 (Os Sentrum) fixed weekly schedule.
+  if (id === "musikkbinge2" || id === "os_sentrum" || id === "musikkbingeos") {
+    return [
+      {
+        names: "Henrik Furuvik",
+        weekday: 0,
+        startTime: "18:00",
+        endTime: "22:00",
+      }, // Sunday
+    ];
+  }
+
+  // Søfteland (musikkbinge1) weekly schedule
   if (id === "musikkbinge1" || id === "soefteland") {
     return [
       {
@@ -59,12 +71,6 @@ function getWeeklyTemplates(calendarId) {
       { names: "E39", weekday: 2, startTime: "18:00", endTime: "24:00" }, // Tuesday
       {
         names: "De Navnløse",
-        weekday: 4,
-        startTime: "12:00",
-        endTime: "24:00",
-      }, // Thursday
-      {
-        names: "De Navnløse",
         weekday: 0,
         startTime: "17:00",
         endTime: "20:00",
@@ -72,37 +78,8 @@ function getWeeklyTemplates(calendarId) {
     ];
   }
 
-  // Default schedule (existing behavior)
-  return [
-    {
-      names: "Silver Monochrome",
-      weekday: 1,
-      startTime: "18:00",
-      endTime: "22:00",
-    },
-    {
-      names: "Young Collection",
-      weekday: 2,
-      startTime: "16:00",
-      endTime: "20:00",
-    },
-    {
-      names: "Blue Experience",
-      weekday: 3,
-      startTime: "16:00",
-      endTime: "20:30",
-    },
-    {
-      names: ["Warfart", "Verdiløse Menn"],
-      weekday: 4,
-      startTime: "18:00",
-      endTime: "23:00",
-    },
-    { names: "Dødsdau", weekday: 5, startTime: "18:00", endTime: "23:00" },
-    { names: "Notörious", weekday: 6, startTime: "14:00", endTime: "18:00" },
-    { names: "Storm Valley", weekday: 6, startTime: "18:30", endTime: "23:00" },
-    { names: "Tommy Cash", weekday: 0, startTime: "18:00", endTime: "23:00" },
-  ];
+  // No default schedule: this project is configured with explicit tenant schedules only.
+  return [];
 }
 
 function getDateForWeekday(base, weekday, weekOffset = 0) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import type { EventInput } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -149,6 +149,22 @@ export default function Calendar() {
       end: b.end_ts,
     }));
     setEvents(evs || []);
+
+    // If Musikkbinge2 (Os Sentrum) is empty, ensure fixed Henrik Furuvik schedule exists.
+    if (
+      (CALENDAR_ID === "musikkbinge2" ||
+        CALENDAR_ID === "os_sentrum" ||
+        CALENDAR_ID === "musikkbingeos") &&
+      evs.length === 0
+    ) {
+      pushToast({
+        id: `seed-fallback-${Date.now()}`,
+        message:
+          "Ingen bookings funnet for Musikkbingen 2. Genererer fast søndagsbooking for Henrik Furuvik...",
+      });
+      await seedWeeklySchedule(52);
+      return;
+    }
   }
 
   function toYMD(x: any) {
@@ -186,6 +202,22 @@ export default function Calendar() {
   function getWeeklyTemplates(calendarId: string) {
     const id = (calendarId || "").toLowerCase();
 
+    // Musikkbinge 2 (Os Sentrum) fixed weekly show
+    if (
+      id === "musikkbinge2" ||
+      id === "os_sentrum" ||
+      id === "musikkbingeos"
+    ) {
+      return [
+        {
+          names: "Henrik Furuvik",
+          weekday: 0,
+          startTime: "18:00",
+          endTime: "22:00",
+        }, // Sunday
+      ];
+    }
+
     // Søfteland is the primary venue with an established weekly schedule.
     // This matches the weekly timetable shown in the provided image.
     if (id === "musikkbinge1" || id === "soefteland") {
@@ -197,12 +229,6 @@ export default function Calendar() {
           endTime: "24:00",
         }, // Monday
         { names: "E39", weekday: 2, startTime: "18:00", endTime: "24:00" }, // Tuesday
-        {
-          names: "De Navnløse",
-          weekday: 4,
-          startTime: "12:00",
-          endTime: "24:00",
-        }, // Thursday
         {
           names: "De Navnløse",
           weekday: 0,
@@ -297,6 +323,23 @@ export default function Calendar() {
     let inserted = 0;
     let skipped = 0;
     let failed = 0;
+
+    // Remove existing seeded bookings in the target date range before reseeding.
+    // This ensures that stale entries (like old Thursday De Navnløse in musikkbinge1)
+    // are not left behind after changing the template.
+    try {
+      const endDate = new Date(today);
+      endDate.setDate(endDate.getDate() + weeks * 7);
+
+      await supabase
+        .from("bookings")
+        .delete()
+        .eq("calendar_id", CALENDAR_ID)
+        .gte("start_ts", today.toISOString())
+        .lt("start_ts", endDate.toISOString());
+    } catch (err) {
+      console.error("Failed to clear existing seed bookings", err);
+    }
 
     for (let w = 0; w < weeks; w++) {
       for (const tpl of templates) {
