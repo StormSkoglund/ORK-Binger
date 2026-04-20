@@ -1,26 +1,17 @@
-import { useEffect, useRef, useState } from "react";
-import FullCalendar from "@fullcalendar/react";
+import { useEffect, useState } from "react";
 import type { EventInput } from "@fullcalendar/core";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-// FullCalendar CSS is loaded from CDN in index.html (vite couldn't resolve the package CSS)
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
-import Toast from "./Toast";
-
-// calendar id helper is now shared; import from util module
 import { CALENDAR_ID } from "../lib/calendar";
 
 type BookingRow = {
   id: string;
   user_name: string;
-  // new timestamp fields for hourly scheduling
-  start_ts: string; // ISO timestamp
-  end_ts: string; // ISO timestamp
-  calendar_id?: string; // tenant identifier (optional when fetching)
+  start_ts: string;
+  end_ts: string;
+  calendar_id?: string;
 };
 
-type ToastItem = {
+export type ToastItem = {
   id: string;
   message: string;
   actionLabel?: string;
@@ -29,32 +20,22 @@ type ToastItem = {
   onCancel?: () => void;
 };
 
-export default function Calendar() {
-  const calendarRef = useRef<any>(null);
+export type ModalEvent = {
+  id: string;
+  title: string;
+  startIso: string;
+  endIso: string;
+};
+
+export function useBookingCalendar() {
   const [events, setEvents] = useState<EventInput[]>([]);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
-  const [modalEvent, setModalEvent] = useState<null | {
-    id: string;
-    title: string;
-    startIso: string;
-    endIso: string;
-  }>(null);
+  const [modalEvent, setModalEvent] = useState<ModalEvent | null>(null);
   const [supabaseError, setSupabaseError] = useState<string | null>(null);
-
-  // show a toast confirmation before seeding the weekly schedule
-  const [seedConfirmationPending, setSeedConfirmationPending] = useState(false);
-
-  // render the seed button only when the app is accessed at /admin.
-  // leaving it in the component keeps the logic simple without introducing
-  // routing libraries.
-  const isAdmin =
-    typeof window !== "undefined" &&
-    window.location.pathname.replace(/\/+$/, "") === "/admin";
 
   useEffect(() => {
     loadBookings();
 
-    // Realtime subscription (only if Supabase configured)
     let channelRef: any = null;
     const setupRealtime = async () => {
       if (!isSupabaseConfigured) return;
@@ -74,7 +55,6 @@ export default function Calendar() {
             if (!row) return;
 
             if (payload.eventType === "INSERT") {
-              // avoid duplicates
               setEvents((prev) =>
                 prev.some((e) => e.id === row.id)
                   ? prev
@@ -118,7 +98,6 @@ export default function Calendar() {
     return () => {
       if (channelRef) channelRef.unsubscribe();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function loadBookings() {
@@ -127,6 +106,7 @@ export default function Calendar() {
       .select("id,user_name,start_ts,end_ts")
       .eq("calendar_id", CALENDAR_ID)
       .order("start_ts", { ascending: true });
+
     if (error) {
       console.error("Supabase loadBookings error", error);
       const msg =
@@ -149,7 +129,6 @@ export default function Calendar() {
     }));
     setEvents(evs || []);
 
-    // If Musikkbinge2 (Os Sentrum) is empty, ensure fixed Henrik Furuvik schedule exists.
     if (
       (CALENDAR_ID === "musikkbinge2" ||
         CALENDAR_ID === "os_sentrum" ||
@@ -162,30 +141,7 @@ export default function Calendar() {
           "Ingen bookings funnet for Musikkbingen 2. Genererer fast søndagsbooking for Henrik Furuvik...",
       });
       await seedWeeklySchedule(52);
-      return;
     }
-  }
-
-  function toYMD(x: any) {
-    if (!x) return "";
-    if (typeof x === "string") return x.slice(0, 10);
-    if (x instanceof Date) return x.toISOString().slice(0, 10);
-    return "";
-  }
-
-  function formatForDateTimeLocal(iso?: string) {
-    if (!iso) return "";
-    const d = new Date(iso);
-    const year = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const dd = String(d.getDate()).padStart(2, "0");
-    const hh = String(d.getHours()).padStart(2, "0");
-    const min = String(d.getMinutes()).padStart(2, "0");
-    return `${year}-${mm}-${dd}T${hh}:${min}`;
-  }
-
-  function rangesOverlap(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date) {
-    return aStart < bEnd && bStart < aEnd;
   }
 
   function isRangeBooked(start: Date, end: Date, allowEventId?: string) {
@@ -197,11 +153,13 @@ export default function Calendar() {
     });
   }
 
-  // Weekly schedule template (used by the "Seed weekly schedule" action)
+  function rangesOverlap(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date) {
+    return aStart < bEnd && bStart < aEnd;
+  }
+
   function getWeeklyTemplates(calendarId: string) {
     const id = (calendarId || "").toLowerCase();
 
-    // Musikkbinge 2 (Os Sentrum) fixed weekly show
     if (
       id === "musikkbinge2" ||
       id === "os_sentrum" ||
@@ -213,12 +171,10 @@ export default function Calendar() {
           weekday: 0,
           startTime: "18:00",
           endTime: "22:00",
-        }, // Sunday
+        },
       ];
     }
 
-    // Søfteland is the primary venue with an established weekly schedule.
-    // This matches the weekly timetable shown in the provided image.
     if (id === "musikkbinge1" || id === "soefteland") {
       return [
         {
@@ -226,52 +182,51 @@ export default function Calendar() {
           weekday: 1,
           startTime: "19:00",
           endTime: "24:00",
-        }, // Monday
-        { names: "E39", weekday: 2, startTime: "18:00", endTime: "24:00" }, // Tuesday
+        },
+        { names: "E39", weekday: 2, startTime: "18:00", endTime: "24:00" },
         {
           names: "De Navnløse",
           weekday: 0,
           startTime: "17:00",
           endTime: "20:00",
-        }, // Sunday
+        },
       ];
     }
 
-    // Default schedule for other calendars
     return [
       {
         names: "Silver Monochrome",
         weekday: 1,
         startTime: "18:00",
         endTime: "22:00",
-      }, // Monday
+      },
       {
         names: "Young Collection",
         weekday: 2,
         startTime: "16:00",
         endTime: "20:00",
-      }, // Tuesday
+      },
       {
         names: "Blue Experience",
         weekday: 3,
         startTime: "16:00",
         endTime: "20:30",
-      }, // Wednesday
+      },
       {
         names: ["Warfart", "Verdiløse Menn"],
         weekday: 4,
         startTime: "18:00",
         endTime: "23:00",
-      }, // Thursday (alternate weekly)
-      { names: "Dødsdau", weekday: 5, startTime: "18:00", endTime: "23:00" }, // Friday
-      { names: "Notörious", weekday: 6, startTime: "14:00", endTime: "18:00" }, // Saturday (early)
+      },
+      { names: "Dødsdau", weekday: 5, startTime: "18:00", endTime: "23:00" },
+      { names: "Notörious", weekday: 6, startTime: "14:00", endTime: "18:00" },
       {
         names: "Storm Valley",
         weekday: 6,
         startTime: "18:30",
         endTime: "23:00",
-      }, // Saturday (late)
-      { names: "Tommy Cash", weekday: 0, startTime: "18:00", endTime: "23:00" }, // Sunday
+      },
+      { names: "Tommy Cash", weekday: 0, startTime: "18:00", endTime: "23:00" },
     ];
   }
 
@@ -289,7 +244,6 @@ export default function Calendar() {
     const mm = parseInt(mmStr, 10);
     const d = new Date(dt);
 
-    // treat 24:00 as the end of the day (next midnight)
     if (hh === 24) {
       d.setDate(d.getDate() + 1);
       d.setHours(0, mm, 0, 0);
@@ -299,7 +253,16 @@ export default function Calendar() {
     return d;
   }
 
-  // Manually seed the weekly plan into the bookings table for N weeks
+  function pushToast(t: ToastItem) {
+    const id = t.id || String(Date.now());
+    setToasts((s) => [...s, { ...t, id }]);
+    setTimeout(() => removeToast(id), 6000);
+  }
+
+  function removeToast(id: string) {
+    setToasts((s) => s.filter((t) => t.id !== id));
+  }
+
   async function seedWeeklySchedule(weeks = 52) {
     if (!isSupabaseConfigured) {
       pushToast({
@@ -308,9 +271,6 @@ export default function Calendar() {
       });
       return;
     }
-
-    // confirmation handled via toast (button triggers a toast with a "Bekreft" action)
-    // proceed with seeding when seedWeeklySchedule is called directly
 
     pushToast({
       id: `seed-start-${Date.now()}`,
@@ -323,9 +283,6 @@ export default function Calendar() {
     let skipped = 0;
     let failed = 0;
 
-    // Remove existing seeded bookings in the target date range before reseeding.
-    // This ensures that stale entries (like old Thursday De Navnløse in musikkbinge1)
-    // are not left behind after changing the template.
     try {
       const endDate = new Date(today);
       endDate.setDate(endDate.getDate() + weeks * 7);
@@ -364,7 +321,6 @@ export default function Calendar() {
             .single();
 
           if (error || !data) {
-            // likely overlap / constraint — count as skipped
             skipped++;
             continue;
           }
@@ -392,13 +348,12 @@ export default function Calendar() {
     });
   }
 
-  // External name dropped onto a date
   async function handleEventReceive(info: any) {
     const event = info.event;
     const start = event.start as Date | null;
     const end =
       (event.end as Date) ||
-      (start ? new Date(start.getTime() + 60 * 60 * 1000) : null); // default 1h
+      (start ? new Date(start.getTime() + 60 * 60 * 1000) : null);
 
     if (!start || !end) {
       pushToast({
@@ -418,7 +373,6 @@ export default function Calendar() {
       return;
     }
 
-    // Client-side overlap prevention
     if (isRangeBooked(start, end)) {
       pushToast({
         id: `err-overlap-${Date.now()}`,
@@ -429,7 +383,6 @@ export default function Calendar() {
       return;
     }
 
-    // Insert into DB using ISO timestamps
     const { data, error } = await supabase
       .from("bookings")
       .insert([
@@ -460,7 +413,6 @@ export default function Calendar() {
       return;
     }
 
-    // Persist event id and update local state
     event.setProp("id", data.id);
     setEvents((prev) => [
       ...prev,
@@ -474,13 +426,21 @@ export default function Calendar() {
 
     pushToast({
       id: data.id,
-      message: `Booked ${data.user_name} — ${new Date(data.start_ts).toLocaleString(undefined, { hour12: false, hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short", year: "numeric" })}`,
+      message: `Booked ${data.user_name} — ${new Date(
+        data.start_ts,
+      ).toLocaleString(undefined, {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })}`,
       actionLabel: "Undo",
       onAction: async () => await undoDeleteBooking(data.id),
     });
   }
 
-  // Allow external drop OR internal drag to time slots that are not booked (except allow moving same event)
   function eventAllow(dropInfo: any) {
     const start = dropInfo.start as Date;
     const end =
@@ -491,7 +451,6 @@ export default function Calendar() {
     return !isRangeBooked(start, end, draggingEventId);
   }
 
-  // When user drags an existing event to another time (reschedule)
   async function handleEventDrop(info: any) {
     const event = info.event;
     const id = event.id as string;
@@ -547,13 +506,81 @@ export default function Calendar() {
     );
     pushToast({
       id,
-      message: `Rescheduled ${data.user_name} → ${new Date(data.start_ts).toLocaleString(undefined, { hour12: false, hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short", year: "numeric" })}`,
+      message: `Rescheduled ${data.user_name} → ${new Date(
+        data.start_ts,
+      ).toLocaleString(undefined, {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })}`,
       actionLabel: "Undo",
       onAction: async () => await undoDeleteBooking(id),
     });
   }
 
-  async function handleEventClick(arg: any) {
+  async function handleEventResize(info: any) {
+    const id = info.event.id as string;
+    const newStart = info.event.start as Date;
+    const newEnd = info.event.end as Date;
+    if (!newStart || !newEnd) {
+      info.revert();
+      return;
+    }
+
+    if (isRangeBooked(newStart, newEnd, id)) {
+      pushToast({
+        id: `err-overlap-${Date.now()}`,
+        message:
+          "That time overlaps an existing booking — please contact the band to request permission.",
+      });
+      info.revert();
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from("bookings")
+      .update({
+        start_ts: newStart.toISOString(),
+        end_ts: newEnd.toISOString(),
+      })
+      .eq("id", id)
+      .select()
+      .single();
+
+    if (error || !data) {
+      pushToast({
+        id: `err-resize-${Date.now()}`,
+        message: "Failed to save resized booking.",
+      });
+      info.revert();
+      return;
+    }
+
+    setEvents((prev) =>
+      prev.map((e) =>
+        e.id === id ? { ...e, start: data.start_ts, end: data.end_ts } : e,
+      ),
+    );
+
+    pushToast({
+      id,
+      message: `Updated ${data.user_name} → ${new Date(
+        data.start_ts,
+      ).toLocaleString(undefined, {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })}`,
+    });
+  }
+
+  function handleEventClick(arg: any) {
     const id = arg.event.id as string;
     const title = arg.event.title;
     const startIso = arg.event.start
@@ -584,7 +611,6 @@ export default function Calendar() {
     newStartIso: string,
     newEndIso?: string,
   ) {
-    // Validate
     if (!newStartIso) {
       pushToast({
         id: `err-no-date-resched-${Date.now()}`,
@@ -633,7 +659,16 @@ export default function Calendar() {
     );
     pushToast({
       id,
-      message: `Rescheduled ${data.user_name} → ${new Date(data.start_ts).toLocaleString(undefined, { hour12: false, hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short", year: "numeric" })}`,
+      message: `Rescheduled ${data.user_name} → ${new Date(
+        data.start_ts,
+      ).toLocaleString(undefined, {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })}`,
       actionLabel: "Undo",
       onAction: async () => await undoDeleteBooking(id),
     });
@@ -641,8 +676,6 @@ export default function Calendar() {
   }
 
   async function undoDeleteBooking(id: string) {
-    // Undo for simplicity will delete the existing row if called after reschedule/insert —
-    // here we'll attempt to delete the booking (acts as "undo" of create/reschedule)
     const { error } = await supabase
       .from("bookings")
       .delete()
@@ -656,265 +689,22 @@ export default function Calendar() {
     setEvents((prev) => prev.filter((e) => e.id !== id));
   }
 
-  function pushToast(t: ToastItem) {
-    const id = t.id || String(Date.now());
-    setToasts((s) => [...s, { ...t, id }]);
-    // auto-remove after 6s
-    setTimeout(() => removeToast(id), 6000);
-  }
-
-  function removeToast(id: string) {
-    setToasts((s) => s.filter((t) => t.id !== id));
-  }
-
-  return (
-    <div className="calendar-container">
-      <div className="calendar-scroll-wrapper">
-        <FullCalendar
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          firstDay={1}
-          initialView="timeGridWeek"
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
-          }}
-          slotDuration="01:00:00"
-          slotLabelFormat={{
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          }}
-          displayEventTime={false}
-          eventTimeFormat={{
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          }}
-          droppable={true}
-          editable={true}
-          selectable={true}
-          events={events}
-          eventReceive={handleEventReceive}
-          eventAllow={eventAllow}
-          eventDrop={handleEventDrop}
-          eventResize={async (info) => {
-            // when resized, update DB (similar to drop)
-            const id = info.event.id as string;
-            const newStart = info.event.start as Date;
-            const newEnd = info.event.end as Date;
-            if (!newStart || !newEnd) {
-              info.revert();
-              return;
-            }
-            if (isRangeBooked(newStart, newEnd, id)) {
-              pushToast({
-                id: `err-overlap-${Date.now()}`,
-                message:
-                  "That time overlaps an existing booking — please contact the band to request permission.",
-              });
-              info.revert();
-              return;
-            }
-            const { data, error } = await supabase
-              .from("bookings")
-              .update({
-                start_ts: newStart.toISOString(),
-                end_ts: newEnd.toISOString(),
-              })
-              .eq("id", id)
-              .select()
-              .single();
-            if (error || !data) {
-              pushToast({
-                id: `err-resize-${Date.now()}`,
-                message: "Failed to save resized booking.",
-              });
-              info.revert();
-              return;
-            }
-            setEvents((prev) =>
-              prev.map((e) =>
-                e.id === id
-                  ? { ...e, start: data.start_ts, end: data.end_ts }
-                  : e,
-              ),
-            );
-            pushToast({
-              id,
-              message: `Updated ${data.user_name} → ${new Date(data.start_ts).toLocaleString(undefined, { hour12: false, hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short", year: "numeric" })}`,
-            });
-          }}
-          eventClick={handleEventClick}
-          ref={calendarRef}
-          height="parent"
-          scrollTime="18:00:00"
-        />
-      </div>
-
-      {isSupabaseConfigured && isAdmin && (
-        <div style={{ marginTop: 12 }}>
-          <button
-            className="btn"
-            onClick={() => {
-              if (seedConfirmationPending) {
-                pushToast({
-                  id: `seed-remind-${Date.now()}`,
-                  message:
-                    "Bekreft i varselet (toast) for å gjenstarte ukeplanen.",
-                });
-                return;
-              }
-
-              setSeedConfirmationPending(true);
-              const toastId = `seed-confirm-${Date.now()}`;
-              pushToast({
-                id: toastId,
-                message:
-                  "ADVARSEL: Gjenstart ukeplan for de neste 52 ukene. Dette vil opprette bookings i databasen. Er du sikker?",
-                actionLabel: "Bekreft",
-                onAction: async () => {
-                  setSeedConfirmationPending(false);
-                  await seedWeeklySchedule(52);
-                },
-              });
-
-              // clear pending flag when toast auto-expires (buffered)
-              setTimeout(() => setSeedConfirmationPending(false), 8000);
-            }}
-            disabled={seedConfirmationPending}
-          >
-            {seedConfirmationPending
-              ? "Bekreft i varselet..."
-              : "Gjenstart ukeplan (52 uker)"}
-          </button>
-          <small style={{ marginLeft: 8, color: "#666" }}>
-            Denne knappen gjenskaper ukeplanen for 52 uker frem i tid. Bekreft i
-            varselet for å fullføre handlingen.
-          </small>
-        </div>
-      )}
-
-      {modalEvent && (
-        <div className="modal-backdrop" onClick={() => setModalEvent(null)}>
-          <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>{modalEvent.title}</h3>
-            <div className="modal-row">
-              Start:{" "}
-              {new Date(modalEvent.startIso).toLocaleString(undefined, {
-                hour12: false,
-                hour: "2-digit",
-                minute: "2-digit",
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              })}
-            </div>
-            <div className="modal-row">
-              End:{" "}
-              {modalEvent.endIso
-                ? new Date(modalEvent.endIso).toLocaleString(undefined, {
-                    hour12: false,
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })
-                : "—"}
-            </div>
-            <div className="modal-actions">
-              <button
-                className="btn btn-danger"
-                onClick={() => {
-                  // ask user to confirm deletion via toast
-                  pushToast({
-                    id: `confirm-del-${modalEvent.id}`,
-                    message: `Er du helt sikker på at du vil fjerne tiden til ${modalEvent.title}?`,
-                    // primary confirm
-                    actionLabel: "Ja",
-                    onAction: () => deleteBooking(modalEvent.id),
-                    // secondary cancel option
-                    cancelLabel: "Nej",
-                    onCancel: () => {
-                      /* just close the toast */
-                    },
-                  });
-                }}
-              >
-                Cancel booking
-              </button>
-              <div className="reschedule">
-                <label>
-                  Start:
-                  <input
-                    defaultValue={formatForDateTimeLocal(modalEvent.startIso)}
-                    type="datetime-local"
-                    id="reschedule-start"
-                  />
-                </label>
-                <label>
-                  End:
-                  <input
-                    defaultValue={
-                      modalEvent.endIso
-                        ? formatForDateTimeLocal(modalEvent.endIso)
-                        : ""
-                    }
-                    type="datetime-local"
-                    id="reschedule-end"
-                  />
-                </label>
-                <button
-                  className="btn"
-                  onClick={() => {
-                    const s = (
-                      document.getElementById(
-                        "reschedule-start",
-                      ) as HTMLInputElement
-                    ).value;
-                    const e = (
-                      document.getElementById(
-                        "reschedule-end",
-                      ) as HTMLInputElement
-                    ).value;
-                    if (s)
-                      rescheduleBooking(
-                        modalEvent.id,
-                        new Date(s).toISOString(),
-                        e ? new Date(e).toISOString() : undefined,
-                      );
-                  }}
-                >
-                  Save
-                </button>
-              </div>
-              <button className="btn" onClick={() => setModalEvent(null)}>
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {!isSupabaseConfigured && (
-        <div className="notice" style={{ marginTop: 12, color: "#b45309" }}>
-          Supabase not configured — bookings will not persist. Add keys to
-          `.env` and restart dev server.
-        </div>
-      )}
-
-      {isSupabaseConfigured && supabaseError && (
-        <div className="notice" style={{ marginTop: 12 }}>
-          <strong>Supabase error:</strong> {supabaseError}
-          <div style={{ marginTop: 6 }}>
-            Common causes: invalid project URL / anon key, table not created, or
-            RLS policy blocking access.
-          </div>
-        </div>
-      )}
-
-      <Toast toasts={toasts} removeToast={removeToast} />
-    </div>
-  );
+  return {
+    events,
+    toasts,
+    modalEvent,
+    setModalEvent,
+    supabaseError,
+    handleEventReceive,
+    eventAllow,
+    handleEventDrop,
+    handleEventResize,
+    handleEventClick,
+    deleteBooking,
+    rescheduleBooking,
+    undoDeleteBooking,
+    seedWeeklySchedule,
+    pushToast,
+    removeToast,
+  };
 }
