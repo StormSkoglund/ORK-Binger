@@ -57,7 +57,6 @@ export default function Calendar() {
     // Realtime subscription (only if Supabase configured)
     let channelRef: any = null;
     const setupRealtime = async () => {
-      const { isSupabaseConfigured } = await import("../lib/supabase");
       if (!isSupabaseConfigured) return;
 
       const ch = supabase
@@ -658,9 +657,10 @@ export default function Calendar() {
   }
 
   function pushToast(t: ToastItem) {
-    setToasts((s) => [...s, { ...t, id: t.id || String(Date.now()) }]);
+    const id = t.id || String(Date.now());
+    setToasts((s) => [...s, { ...t, id }]);
     // auto-remove after 6s
-    setTimeout(() => removeToast(t.id), 6000);
+    setTimeout(() => removeToast(id), 6000);
   }
 
   function removeToast(id: string) {
@@ -672,6 +672,7 @@ export default function Calendar() {
       <div className="calendar-scroll-wrapper">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          firstDay={1}
           initialView="timeGridWeek"
           headerToolbar={{
             left: "prev,next today",
