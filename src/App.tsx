@@ -1,5 +1,5 @@
 import DraggableNames from "./components/DraggableNames";
-import Calendar from "./components/Calendar";
+import Calendar from "./components/Calendar.new";
 import Landing from "./components/Landing";
 import { getCalendarId } from "./lib/calendar";
 
