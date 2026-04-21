@@ -1,9 +1,9 @@
 import NewsFeed from "./NewsFeed";
 
 const VENUES = [
-  { id: "musikkbinge1", name: "Musikkbingen Søfteland",    meta: "Søfteland" },
-  { id: "musikkbinge2", name: "Musikkbingen Os Sentrum",   meta: "Os Sentrum" },
-  { id: "musikkbinge3", name: "Musikkbingen Nore Neset",   meta: "Nore Neset" },
+  { id: "musikkbinge1", name: "Musikkbingen Søfteland", meta: "Søfteland" },
+  { id: "musikkbinge2", name: "Musikkbingen Os Sentrum", meta: "Os Sentrum" },
+  { id: "musikkbinge3", name: "Musikkbingen Nore Neset", meta: "Nore Neset" },
 ];
 
 export default function Landing() {
@@ -27,7 +27,7 @@ export default function Landing() {
           <span className="hero-tag">Online bookingsystem</span>
           <h1 className="hero-title">Musikkbingene i Os</h1>
           <p className="hero-subtitle">
-            Velg en øvingsbinge nedenfor for å se tilgjengelighet og legge til booking.
+            Velg ønsket binge for å se tilgjengelige tider.
           </p>
         </section>
 
@@ -39,10 +39,14 @@ export default function Landing() {
               {VENUES.map((v, i) => (
                 <li key={v.id}>
                   <a href={`/${v.id}`} className="venue-card">
-                    <div className="venue-card-index">{String(i + 1).padStart(2, "0")}</div>
+                    <div className="venue-card-index">
+                      {String(i + 1).padStart(2, "0")}
+                    </div>
                     <div className="venue-card-body">
                       <h2 className="venue-card-name">{v.name}</h2>
-                      <span className="venue-card-meta">Klikk for å åpne kalender</span>
+                      <span className="venue-card-meta">
+                        Klikk for å åpne kalender
+                      </span>
                     </div>
                     <span className="venue-card-arrow">→</span>
                   </a>

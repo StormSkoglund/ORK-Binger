@@ -63,23 +63,25 @@ export default function App() {
           <span className="app-header-divider" />
           <h1 className="app-header-title">{appTitle}</h1>
           {((path !== "" && path !== "/") || hasCalParam) && (
-            <a className="btn btn-sm btn-ghost" href="/">← Oversikt</a>
+            <a className="btn btn-sm btn-ghost" href="/">
+              ← Oversikt
+            </a>
           )}
         </div>
       </header>
 
       <main className="app-main">
-      <div className="layout">
-        <DraggableNames guestBand={guestBand} guestMode={guestMode} />
-        <Calendar
-          guestBand={guestBand}
-          guestMode={guestMode}
-          guestEvents={guestEvents}
-          addGuestBooking={addGuestBooking}
-          updateGuestBooking={updateGuestBooking}
-          removeGuestBooking={removeGuestBooking}
-        />
-      </div>
+        <div className="layout">
+          <DraggableNames guestBand={guestBand} guestMode={guestMode} />
+          <Calendar
+            guestBand={guestBand}
+            guestMode={guestMode}
+            guestEvents={guestEvents}
+            addGuestBooking={addGuestBooking}
+            updateGuestBooking={updateGuestBooking}
+            removeGuestBooking={removeGuestBooking}
+          />
+        </div>
       </main>
 
       {!isAdmin && guestIntroOpen && (
@@ -120,7 +122,9 @@ export default function App() {
       )}
 
       <footer className="app-footer" role="contentinfo">
-        <small>© {new Date().getFullYear()} Alex Storm Skoglund — Musikkbingene Os</small>
+        <small>
+          © {new Date().getFullYear()} Alex Storm Skoglund — Musikkbingene Os
+        </small>
       </footer>
     </div>
   );

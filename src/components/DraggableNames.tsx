@@ -108,14 +108,19 @@ export default function DraggableNames({
               {band}
             </div>
           ) : (
-            <div key={band} className="fc-external-disabled" aria-disabled="true">
+            <div
+              key={band}
+              className="fc-external-disabled"
+              aria-disabled="true"
+            >
               {band}
             </div>
           );
         })}
       </div>
       <p className="hint">
-        Dra bandet ditt til et tidsrom i kalenderen for å lage en booking. Kun ditt band er interaktivt i demoen.
+        Dra bandet ditt til et tidsrom i kalenderen for å lage en booking. Kun
+        ditt band er interaktivt i demoen.
       </p>
     </div>
   );

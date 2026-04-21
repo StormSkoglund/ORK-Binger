@@ -135,7 +135,9 @@ export default function NewsFeed() {
           <li className="news-feed-item">
             <div className="news-feed-dot" />
             <div className="news-feed-content">
-              <span className="news-feed-message">Ingen nye hendelser akkurat nå.</span>
+              <span className="news-feed-message">
+                Ingen nye hendelser akkurat nå.
+              </span>
             </div>
           </li>
         ) : (
@@ -143,7 +145,9 @@ export default function NewsFeed() {
             <li key={item.id} className="news-feed-item">
               <div className="news-feed-dot" />
               <div className="news-feed-content">
-                <span className="news-feed-time">{formatDateTime(item.time)}</span>
+                <span className="news-feed-time">
+                  {formatDateTime(item.time)}
+                </span>
                 <span className="news-feed-message">{item.message}</span>
               </div>
             </li>
