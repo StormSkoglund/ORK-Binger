@@ -991,10 +991,16 @@ small {
   .app-main { padding: 16px 16px 40px; }
   .app-header-inner { padding: 0 16px; }
   .app-header-logo-text { display: none; }
+  .site-header-inner { padding: 0 16px; }
+  .site-logo-name { display: none; }
   .modal { padding: 20px 18px; }
 }
 @media (max-width: 480px) {
   .hero-title { font-size: 1.75rem; }
+  .hero-subtitle { font-size: 0.95rem; }
+  .site-header-badge { display: none; }
   .calendar-container { padding: 10px; }
   .fc-external { padding: 8px 12px; font-size: 0.82rem; }
+  .news-feed-list { max-height: 300px; }
+  .venue-card { padding: 14px 16px; }
 }
