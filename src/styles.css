@@ -34,7 +34,7 @@
   --success:        #16a34a;
   --success-bg:     #f0fdf4;
 
-  /* Shadows – very refined */
+  /* Shadows ï¿½ very refined */
   --shadow-xs: 0 1px 2px rgba(15,23,42,.04);
   --shadow-sm: 0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
   --shadow-md: 0 4px 6px rgba(15,23,42,.05), 0 2px 4px rgba(15,23,42,.04);
@@ -789,12 +789,30 @@ html.is-dragging, body.is-dragging {
 }
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 20px;
-  padding-top: 20px;
+  padding-top: 16px;
   border-top: 1px solid var(--border);
+}
+.modal-actions-right {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+@media (max-width: 400px) {
+  .modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .modal-actions-right {
+    justify-content: stretch;
+  }
+  .modal-actions-right .btn {
+    flex: 1;
+  }
 }
 
 /* --- Inputs ------------------------------------------------------------ */
@@ -819,10 +837,15 @@ html.is-dragging, body.is-dragging {
 }
 
 .reschedule {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+@media (max-width: 400px) {
+  .reschedule {
+    grid-template-columns: 1fr;
+  }
 }
 .reschedule label {
   display: flex;
