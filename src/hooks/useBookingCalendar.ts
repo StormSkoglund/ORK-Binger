@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { EventInput } from "@fullcalendar/core";
+import type { GuestBooking } from "./useGuestPass";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import { CALENDAR_ID } from "../lib/calendar";
 
@@ -39,11 +40,11 @@ export type ModalEvent = {
 type UseBookingCalendarOptions = {
   guestName?: string | null;
   guestMode?: boolean;
-  guestEvents?: BookingEvent[];
-  addGuestBooking?: (booking: BookingEvent) => void;
+  guestEvents?: GuestBooking[];
+  addGuestBooking?: (booking: GuestBooking) => void;
   updateGuestBooking?: (
     id: string,
-    updated: Partial<Omit<BookingEvent, "id" | "isGuest">>,
+    updated: Partial<Omit<GuestBooking, "id" | "isGuest">>,
   ) => void;
   removeGuestBooking?: (id: string) => void;
 };
@@ -133,7 +134,7 @@ export function useBookingCalendar(options: UseBookingCalendarOptions = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function saveLocalBooking(booking: BookingEvent) {
+  function saveLocalBooking(booking: GuestBooking) {
     if (guestMode && addGuestBooking) {
       addGuestBooking(booking);
       return;
