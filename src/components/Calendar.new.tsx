@@ -6,9 +6,29 @@ import interactionPlugin from "@fullcalendar/interaction";
 import Toast from "./Toast";
 import BookingModal from "./BookingModal";
 import { useBookingCalendar } from "../hooks/useBookingCalendar";
+import { type GuestBooking } from "../hooks/useGuestPass";
 import { isSupabaseConfigured } from "../lib/supabase";
 
-export default function Calendar() {
+type CalendarProps = {
+  guestBand?: string | null;
+  guestMode: boolean;
+  guestEvents: GuestBooking[];
+  addGuestBooking: (booking: GuestBooking) => void;
+  updateGuestBooking: (
+    id: string,
+    updated: Partial<Omit<GuestBooking, "id" | "isGuest">>,
+  ) => void;
+  removeGuestBooking: (id: string) => void;
+};
+
+export default function Calendar({
+  guestBand,
+  guestMode,
+  guestEvents,
+  addGuestBooking,
+  updateGuestBooking,
+  removeGuestBooking,
+}: CalendarProps) {
   const calendarRef = useRef<any>(null);
   const [seedConfirmationPending, setSeedConfirmationPending] = useState(false);
 
@@ -28,7 +48,14 @@ export default function Calendar() {
     seedWeeklySchedule,
     pushToast,
     removeToast,
-  } = useBookingCalendar();
+  } = useBookingCalendar({
+    guestName: guestBand,
+    guestMode,
+    guestEvents,
+    addGuestBooking,
+    updateGuestBooking,
+    removeGuestBooking,
+  });
 
   const isAdmin =
     typeof window !== "undefined" &&
@@ -42,7 +69,7 @@ export default function Calendar() {
       message: `Er du helt sikker på at du vil fjerne tiden til ${modalEvent.title}?`,
       actionLabel: "Ja",
       onAction: () => deleteBooking(modalEvent.id),
-      cancelLabel: "Nej",
+      cancelLabel: "Nei",
       onCancel: () => {
         /* just close the toast */
       },
@@ -144,6 +171,7 @@ export default function Calendar() {
           onClose={() => setModalEvent(null)}
           onDeleteRequested={confirmDeleteBooking}
           onReschedule={handleReschedule}
+          canEdit={!guestMode || modalEvent.isGuestEvent}
         />
       )}
 

@@ -17,6 +17,7 @@ type BookingModalProps = {
   onClose: () => void;
   onDeleteRequested: () => void;
   onReschedule: (id: string, newStartIso: string, newEndIso?: string) => void;
+  canEdit?: boolean;
 };
 
 export default function BookingModal({
@@ -24,6 +25,7 @@ export default function BookingModal({
   onClose,
   onDeleteRequested,
   onReschedule,
+  canEdit = true,
 }: BookingModalProps) {
   const [startValue, setStartValue] = useState(
     formatForDateTimeLocal(modalEvent.startIso),
@@ -67,47 +69,62 @@ export default function BookingModal({
               })
             : "—"}
         </div>
-        <div className="modal-actions">
-          <button className="btn btn-danger" onClick={onDeleteRequested}>
-            Cancel booking
-          </button>
-          <div className="reschedule">
-            <label>
-              Start:
-              <input
-                value={startValue}
-                onChange={(event) => setStartValue(event.target.value)}
-                type="datetime-local"
-                id={`reschedule-start-${modalEvent.id}`}
-              />
-            </label>
-            <label>
-              End:
-              <input
-                value={endValue}
-                onChange={(event) => setEndValue(event.target.value)}
-                type="datetime-local"
-                id={`reschedule-end-${modalEvent.id}`}
-              />
-            </label>
-            <button
-              className="btn"
-              onClick={() => {
-                if (startValue)
-                  onReschedule(
-                    modalEvent.id,
-                    new Date(startValue).toISOString(),
-                    endValue ? new Date(endValue).toISOString() : undefined,
-                  );
-              }}
-            >
-              Save
+        {canEdit ? (
+          <div className="modal-actions">
+            <button className="btn btn-danger" onClick={onDeleteRequested}>
+              Cancel booking
+            </button>
+            <div className="reschedule">
+              <label>
+                Start:
+                <input
+                  value={startValue}
+                  onChange={(event) => setStartValue(event.target.value)}
+                  type="datetime-local"
+                  id={`reschedule-start-${modalEvent.id}`}
+                />
+              </label>
+              <label>
+                End:
+                <input
+                  value={endValue}
+                  onChange={(event) => setEndValue(event.target.value)}
+                  type="datetime-local"
+                  id={`reschedule-end-${modalEvent.id}`}
+                />
+              </label>
+              <button
+                className="btn"
+                onClick={() => {
+                  if (startValue)
+                    onReschedule(
+                      modalEvent.id,
+                      new Date(startValue).toISOString(),
+                      endValue ? new Date(endValue).toISOString() : undefined,
+                    );
+                }}
+              >
+                Save
+              </button>
+            </div>
+            <button className="btn" onClick={onClose}>
+              Close
             </button>
           </div>
-          <button className="btn" onClick={onClose}>
-            Close
-          </button>
-        </div>
+        ) : (
+          <div
+            className="modal-actions"
+            style={{ flexDirection: "column", alignItems: "stretch" }}
+          >
+            <div className="modal-row" style={{ marginBottom: 10 }}>
+              Dette er en ekte booking fra systemet. I gjestedemoen kan du ikke
+              endre den.
+            </div>
+            <button className="btn" onClick={onClose}>
+              Close
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

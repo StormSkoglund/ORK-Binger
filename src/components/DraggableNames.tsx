@@ -2,66 +2,64 @@ import { useEffect, useRef } from "react";
 import { Draggable } from "@fullcalendar/interaction";
 import { getCalendarId } from "../lib/calendar";
 
-// name lists for each room/calendar
 const NAME_MAP: Record<string, string[]> = {
-  // Søfteland is the main venue with an established weekly lineup
   musikkbinge1: ["Storm Valley", "E39", "De Navnløse", "The Admins"],
   musikkbinge2: ["Sick Fade", "Grim Spencer", "Henrik Furuvik", "The Admins"],
   musikkbinge3: ["Henrik Furuvik", "The Admins"],
 };
 
-export default function DraggableNames() {
+type DraggableNamesProps = {
+  guestBand?: string | null;
+  guestMode?: boolean;
+};
+
+export default function DraggableNames({
+  guestBand,
+  guestMode,
+}: DraggableNamesProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const calendarId =
     typeof window !== "undefined"
       ? getCalendarId().toLowerCase()
       : "musikkbinge1";
-  const NAMES = NAME_MAP[calendarId] || [];
+  const names = NAME_MAP[calendarId] || [];
+  const bandList = guestBand
+    ? [guestBand, ...names.filter((name) => name !== guestBand)]
+    : names;
 
   useEffect(() => {
     let draggable: any;
     const container = containerRef.current;
 
-    // helper handlers used to toggle a temporary 'is-dragging' class on <body>
-    // which forces `touch-action: none` and prevents the browser from turning
-    // the gesture into a scrolling action mid-drag (fixes cancelable=false warnings).
     let onPointerDown: (ev: PointerEvent | TouchEvent) => void;
     let onPointerUp: () => void;
     let onTouchMove: (ev: TouchEvent) => void;
 
     if (container) {
-      // append the mirror to document.body so hit-testing aligns with viewport coordinates
-      // and mark external events as `allDay` so they snap correctly to month-day cells.
       draggable = new Draggable(container, {
         itemSelector: ".fc-external",
         appendTo: document.body,
         eventData: function (el) {
           return {
             title: el.getAttribute("data-name") || "Unknown",
-            // default duration for hourly booking (1 hour)
             duration: "01:00",
           };
         },
       });
 
       onPointerDown = (ev: any) => {
-        // only enable the 'is-dragging' mode when the pointer started on a draggable item
         const target = ev.target as HTMLElement;
         const el =
           target && target.closest ? target.closest(".fc-external") : null;
         if (el) document.body.classList.add("is-dragging");
       };
       onPointerUp = () => document.body.classList.remove("is-dragging");
-
-      // while dragging, intercept touchmove at document level (passive: false)
-      // and prevent default to stop the browser converting the gesture into a scroll.
       onTouchMove = (e: TouchEvent) => {
         if (document.body.classList.contains("is-dragging")) {
           e.preventDefault();
         }
       };
 
-      // pointer events (preferred) + touch fallbacks to cover older browsers
       container.addEventListener("pointerdown", onPointerDown as EventListener);
       window.addEventListener("pointerup", onPointerUp);
       window.addEventListener("pointercancel", onPointerUp);
@@ -71,8 +69,6 @@ export default function DraggableNames() {
       window.addEventListener("touchend", onPointerUp);
       window.addEventListener("touchcancel", onPointerUp);
       window.addEventListener("dragend", onPointerUp);
-
-      // capture touchmove so we can prevent scrolling during an active drag
       window.addEventListener("touchmove", onTouchMove as EventListener, {
         passive: false,
       });
@@ -102,21 +98,26 @@ export default function DraggableNames() {
   return (
     <div className="external-container" ref={containerRef}>
       <h3>Bands (trekk og slipp i kalenderen)</h3>
-      {NAMES.map((n) => (
-        <div key={n} className="fc-external" data-name={n}>
-          {n}
-        </div>
-      ))}
+      {bandList.map((band) => {
+        const isDraggable = guestMode && guestBand === band;
+        return isDraggable ? (
+          <div key={band} className="fc-external" data-name={band}>
+            {band}
+          </div>
+        ) : (
+          <div key={band} className="fc-external-disabled" aria-disabled="true">
+            {band}
+          </div>
+        );
+      })}
       <strong>Booking</strong>
       <p className="hint">
-        Dra et navn til et tidsrom for å booke (standard 1 time). Du kan endre
-        varigheten på hendelsene for å forlenge dem; flere navn per dag er
-        tillatt så lenge tidene ikke overlapper.
+        Dra bandet ditt til et tidsrom for å lage en falsk booking. Bare ditt
+        band er interaktivt i denne demoen.
       </p>
       <strong>Slette Booking</strong>
       <p className="hint">
-        Slett booking ved å trykke venstre musetast på bandets navn i
-        kalenderen.
+        Trykk på din egen booking i kalenderen for å fjerne den.
       </p>
     </div>
   );

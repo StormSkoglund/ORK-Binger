@@ -1,3 +1,6 @@
+from pathlib import Path
+
+content = r'''
 import { useEffect, useState } from "react";
 import type { EventInput } from "@fullcalendar/core";
 import { supabase, isSupabaseConfigured } from "../lib/supabase";
@@ -132,6 +135,10 @@ export function useBookingCalendar(options: UseBookingCalendarOptions = {}) {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function isGuestEvent(event: any) {
+    return !!(event?.extendedProps as Record<string, unknown>)?.isGuest;
+  }
 
   function saveLocalBooking(booking: BookingEvent) {
     if (guestMode && addGuestBooking) {
@@ -556,8 +563,9 @@ export function useBookingCalendar(options: UseBookingCalendarOptions = {}) {
       return;
     }
 
-    const isGuestEvent = !!(event.extendedProps as Record<string, unknown>)
-      ?.isGuest;
+    const isGuestEvent = !!(
+      event.extendedProps as Record<string, unknown>
+    )?.isGuest;
     if (guestMode && !isGuestEvent) {
       pushToast({
         id: `err-readonly-${Date.now()}`,
@@ -639,8 +647,9 @@ export function useBookingCalendar(options: UseBookingCalendarOptions = {}) {
       ? (arg.event.start as Date).toISOString()
       : "";
     const endIso = arg.event.end ? (arg.event.end as Date).toISOString() : "";
-    const isGuestEvent = !!(arg.event.extendedProps as Record<string, unknown>)
-      ?.isGuest;
+    const isGuestEvent = !!(
+      arg.event.extendedProps as Record<string, unknown>
+    )?.isGuest;
 
     setModalEvent({ id, title, startIso, endIso, isGuestEvent });
   }
@@ -785,65 +794,6 @@ export function useBookingCalendar(options: UseBookingCalendarOptions = {}) {
     setToasts((s) => s.filter((t) => t.id !== id));
   }
 
-  async function handleEventResize(info: any) {
-    const id = info.event.id as string;
-    const newStart = info.event.start as Date;
-    const newEnd = info.event.end as Date;
-    if (!newStart || !newEnd) {
-      info.revert();
-      return;
-    }
-
-    if (isRangeBooked(newStart, newEnd, id)) {
-      pushToast({
-        id: `err-overlap-${Date.now()}`,
-        message:
-          "That time overlaps another booking — please contact the band to request permission.",
-      });
-      info.revert();
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from("bookings")
-      .update({
-        start_ts: newStart.toISOString(),
-        end_ts: newEnd.toISOString(),
-      })
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error || !data) {
-      pushToast({
-        id: `err-resize-${Date.now()}`,
-        message: "Failed to save resized booking.",
-      });
-      info.revert();
-      return;
-    }
-
-    setDbEvents((prev) =>
-      prev.map((e) =>
-        e.id === id ? { ...e, start: data.start_ts, end: data.end_ts } : e,
-      ),
-    );
-
-    pushToast({
-      id,
-      message: `Updated ${data.user_name} → ${new Date(
-        data.start_ts,
-      ).toLocaleString(undefined, {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })}`,
-    });
-  }
-
   return {
     events,
     toasts,
@@ -853,13 +803,94 @@ export function useBookingCalendar(options: UseBookingCalendarOptions = {}) {
     handleEventReceive,
     eventAllow,
     handleEventDrop,
-    handleEventResize,
+    handleEventResize: async (info: any) => {
+      const event = info.event;
+      const id = event.id as string;
+      const newStart = event.start as Date;
+      const newEnd = event.end as Date;
+      if (!newStart || !newEnd) {
+        info.revert();
+        return;
+      }
+      const isGuestEvent = !!(
+        event.extendedProps as Record<string, unknown>
+      )?.isGuest;
+      if (guestMode && !isGuestEvent) {
+        pushToast({
+          id: `err-readonly-resize-${Date.now()}`,
+          message: "Ekte bookinger kan ikke endres i gjestedemoen.",
+        });
+        info.revert();
+        return;
+      }
+      if (isRangeBooked(newStart, newEnd, id)) {
+        pushToast({
+          id: `err-overlap-${Date.now()}`,
+          message:
+            "That time overlaps another booking — vennligst velg et annet tidspunkt.",
+        });
+        info.revert();
+        return;
+      }
+
+      if (isGuestEvent || !isSupabaseConfigured) {
+        updateLocalBooking(id, {
+          start: newStart.toISOString(),
+          end: newEnd.toISOString(),
+        });
+        pushToast({
+          id,
+          message: `Oppdatert gjestebooking for ${event.title}.`,
+        });
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("bookings")
+        .update({
+          start_ts: newStart.toISOString(),
+          end_ts: newEnd.toISOString(),
+        })
+        .eq("id", id)
+        .select()
+        .single();
+
+      if (error || !data) {
+        pushToast({
+          id: `err-resize-${Date.now()}`,
+          message: "Failed to save resized booking.",
+        });
+        info.revert();
+        return;
+      }
+      setDbEvents((prev) =>
+        prev.map((e) =>
+          e.id === id
+            ? { ...e, start: data.start_ts, end: data.end_ts }
+            : e,
+        ),
+      );
+      pushToast({
+        id,
+        message: `Updated ${data.user_name} → ${new Date(
+          data.start_ts,
+        ).toLocaleString(undefined, {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })}`,
+      });
+    },
     handleEventClick,
     deleteBooking,
     rescheduleBooking,
-    undoDeleteBooking,
     seedWeeklySchedule,
     pushToast,
     removeToast,
   };
 }
+'''
+Path('src/hooks/useBookingCalendar.ts').write_text(content, encoding='utf-8')
