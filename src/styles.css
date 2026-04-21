@@ -1,10 +1,10 @@
-﻿/* ─── Design Tokens ───────────────────────────────────────────────────── */
+/* --- Design Tokens ----------------------------------------------------- */
 :root {
   /* Brand */
-  --brand-600: #4f46e5;
-  --brand-700: #4338ca;
-  --brand-50:  #eef2ff;
-  --brand-100: #e0e7ff;
+  --brand-600: #c01e2e;
+  --brand-700: #9b1623;
+  --brand-50:  #fff1f2;
+  --brand-100: #ffe1e3;
 
   /* Neutrals (Slate scale) */
   --slate-50:  #f8fafc;
@@ -34,7 +34,7 @@
   --success:        #16a34a;
   --success-bg:     #f0fdf4;
 
-  /* Shadows – very refined */
+  /* Shadows � very refined */
   --shadow-xs: 0 1px 2px rgba(15,23,42,.04);
   --shadow-sm: 0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
   --shadow-md: 0 4px 6px rgba(15,23,42,.05), 0 2px 4px rgba(15,23,42,.04);
@@ -53,7 +53,7 @@
   color-scheme: light;
 }
 
-/* ─── Reset ───────────────────────────────────────────────────────────── */
+/* --- Reset ------------------------------------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
@@ -73,7 +73,7 @@ button, input, textarea, select {
   letter-spacing: inherit;
 }
 
-/* ─── Site Header (Landing) ───────────────────────────────────────────── */
+/* --- Site Header (Landing) --------------------------------------------- */
 .site-header {
   position: sticky;
   top: 0;
@@ -130,7 +130,7 @@ button, input, textarea, select {
   border-radius: 100px;
 }
 
-/* ─── Landing Page ────────────────────────────────────────────────────── */
+/* --- Landing Page ------------------------------------------------------ */
 .landing-root {
   min-height: 100vh;
   display: flex;
@@ -294,7 +294,7 @@ button, input, textarea, select {
   color: var(--brand-600);
 }
 
-/* ─── News Feed ───────────────────────────────────────────────────────── */
+/* --- News Feed --------------------------------------------------------- */
 .news-feed {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -390,7 +390,7 @@ button, input, textarea, select {
   line-height: 1.45;
 }
 
-/* ─── Site Footer ─────────────────────────────────────────────────────── */
+/* --- Site Footer ------------------------------------------------------- */
 .site-footer {
   border-top: 1px solid var(--border);
   padding: 20px 24px;
@@ -404,7 +404,7 @@ button, input, textarea, select {
 }
 .site-footer-dot { color: var(--border); }
 
-/* ─── App Shell (Calendar view) ───────────────────────────────────────── */
+/* --- App Shell (Calendar view) ----------------------------------------- */
 .app-shell {
   min-height: 100vh;
   display: flex;
@@ -492,7 +492,7 @@ button, input, textarea, select {
   padding: 24px 28px 48px;
 }
 
-/* ─── Layout ──────────────────────────────────────────────────────────── */
+/* --- Layout ------------------------------------------------------------ */
 .layout {
   display: grid;
   grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
@@ -500,7 +500,7 @@ button, input, textarea, select {
   align-items: start;
 }
 
-/* ─── Band Sidebar ────────────────────────────────────────────────────── */
+/* --- Band Sidebar ------------------------------------------------------ */
 .external-container {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -579,7 +579,7 @@ button, input, textarea, select {
   border-top: 1px solid var(--border);
 }
 
-/* ─── Drag helpers ────────────────────────────────────────────────────── */
+/* --- Drag helpers ------------------------------------------------------ */
 html.is-dragging, body.is-dragging {
   touch-action: none !important;
   -ms-touch-action: none !important;
@@ -601,7 +601,7 @@ html.is-dragging, body.is-dragging {
   -ms-touch-action: pan-y;
 }
 
-/* ─── Calendar Container ──────────────────────────────────────────────── */
+/* --- Calendar Container ------------------------------------------------ */
 .calendar-container {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -684,7 +684,7 @@ html.is-dragging, body.is-dragging {
   border-color: var(--border) !important;
 }
 
-/* ─── Buttons ─────────────────────────────────────────────────────────── */
+/* --- Buttons ----------------------------------------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -742,7 +742,7 @@ html.is-dragging, body.is-dragging {
   margin-bottom: 4px;
 }
 
-/* ─── Modal ───────────────────────────────────────────────────────────── */
+/* --- Modal ------------------------------------------------------------- */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -797,7 +797,7 @@ html.is-dragging, body.is-dragging {
   border-top: 1px solid var(--border);
 }
 
-/* ─── Inputs ──────────────────────────────────────────────────────────── */
+/* --- Inputs ------------------------------------------------------------ */
 .text-input {
   display: block;
   width: 100%;
@@ -815,7 +815,7 @@ html.is-dragging, body.is-dragging {
   outline: none;
   border-color: var(--brand-600);
   background: var(--surface);
-  box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+  box-shadow: 0 0 0 3px rgba(192,30,46,0.12);
 }
 
 .reschedule {
@@ -847,10 +847,10 @@ html.is-dragging, body.is-dragging {
 .reschedule input:focus {
   outline: none;
   border-color: var(--brand-600);
-  box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+  box-shadow: 0 0 0 3px rgba(192,30,46,0.12);
 }
 
-/* ─── Notice / Alert ──────────────────────────────────────────────────── */
+/* --- Notice / Alert ---------------------------------------------------- */
 .notice {
   display: flex;
   gap: 10px;
@@ -864,7 +864,7 @@ html.is-dragging, body.is-dragging {
   line-height: 1.55;
 }
 
-/* ─── Toast ───────────────────────────────────────────────────────────── */
+/* --- Toast ------------------------------------------------------------- */
 .toast-viewport {
   position: fixed;
   right: 20px;
@@ -921,7 +921,7 @@ html.is-dragging, body.is-dragging {
 }
 .toast-close:hover { color: #fff; }
 
-/* ─── App Footer ──────────────────────────────────────────────────────── */
+/* --- App Footer -------------------------------------------------------- */
 .app-footer {
   border-top: 1px solid var(--border);
   padding: 16px 28px;
@@ -939,7 +939,7 @@ small {
   font-weight: 500;
 }
 
-/* ─── Responsive ──────────────────────────────────────────────────────── */
+/* --- Responsive -------------------------------------------------------- */
 @media (max-width: 1100px) {
   .app-main { padding: 20px 20px 40px; }
   .layout { grid-template-columns: 1fr; }
