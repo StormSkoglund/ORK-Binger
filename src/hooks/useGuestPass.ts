@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const STORAGE_KEY_GUEST_BAND = "guest-pass-band";
 const STORAGE_KEY_GUEST_BOOKINGS = "guest-pass-bookings";
 
-type GuestBooking = {
+export type GuestBooking = {
   id: string;
   title: string;
   start: string;
