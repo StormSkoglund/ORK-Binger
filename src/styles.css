@@ -1,104 +1,623 @@
+/* --- Design Tokens ----------------------------------------------------- */
+:root {
+  /* Brand */
+  --brand-600: #c01e2e;
+  --brand-700: #9b1623;
+  --brand-50: #fff1f2;
+  --brand-100: #ffe1e3;
+
+  /* Neutrals (Slate scale) */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+
+  /* Semantic */
+  --bg: var(--slate-100);
+  --surface: #ffffff;
+  --surface-raised: var(--slate-50);
+  --text: var(--slate-900);
+  --text-muted: var(--slate-500);
+  --text-subtle: var(--slate-400);
+  --border: var(--slate-200);
+  --border-focus: var(--brand-600);
+  --accent: var(--brand-600);
+  --accent-hover: var(--brand-700);
+  --accent-bg: var(--brand-50);
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+  --success: #16a34a;
+  --success-bg: #f0fdf4;
+
+  /* Shadows � very refined */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm:
+    0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md:
+    0 4px 6px rgba(15, 23, 42, 0.05), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg:
+    0 10px 15px rgba(15, 23, 42, 0.06), 0 4px 6px rgba(15, 23, 42, 0.04);
+  --shadow-xl:
+    0 20px 25px rgba(15, 23, 42, 0.08), 0 8px 10px rgba(15, 23, 42, 0.04);
+
+  /* Spacing */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  /* Typography */
+  font-family:
+    "Inter",
+    "Segoe UI",
+    -apple-system,
+    system-ui,
+    sans-serif;
+  font-feature-settings: "cv11", "ss01";
+  color-scheme: light;
+}
+
+/* --- Reset ------------------------------------------------------------- */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-:root {
-  --accent: #0b5fff;
-  --muted: #666;
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial;
+html {
+  scroll-behavior: smooth;
 }
+
 body {
   margin: 0;
-  /* A soft neutral background that works well with silver cards and dark text */
-  background: #f3f4f6;
-  color: #111;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
 }
-.app-container {
-  /* Let the layout expand more on wide screens while still capping max width */
-  width: min(96%, 1600px);
-  max-width: 1600px;
-  margin: 24px auto;
-  padding: 17px;
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  letter-spacing: inherit;
 }
-.layout {
+
+/* --- Site Header (Landing) --------------------------------------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.site-header-inner {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 56px;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.site-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text);
+}
+.site-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--brand-600);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.site-logo-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.site-header-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--slate-100);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+/* --- Landing Page ------------------------------------------------------ */
+.landing-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-main {
+  flex: 1;
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 56px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+/* Hero */
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 680px;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-600);
+  background: var(--brand-50);
+  border: 1px solid var(--brand-100);
+  padding: 4px 12px;
+  border-radius: 100px;
+  width: fit-content;
+}
+.hero-title {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+  color: var(--text);
+}
+.hero-subtitle {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  max-width: 520px;
+  font-weight: 400;
+}
+
+/* Landing body layout */
+.landing-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 28px;
+  align-items: start;
+}
+
+/* Venue Cards */
+.venue-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+}
+
+.venue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.venue-card {
+  display: flex;
+  align-items: center;
   gap: 20px;
-  align-items: flex-start;
-  min-width: 0; /* allow children to shrink */
-  flex-wrap: wrap; /* allow sidebar/calendar to wrap on narrow widths */
+  padding: 20px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: var(--text);
+  transition:
+    box-shadow 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+  position: relative;
+  overflow: hidden;
 }
-.external-container {
-  /* keep the sidebar at its original desktop width; we will shrink the
-     individual items on small viewports instead of touching the container. */
-  width: 220px;
-  flex: 0 0 220px;
-  min-width: 140px;
-  background: #fff;
-  border: 1px solid #eee;
-  padding: 12px 20px 12px 12px; /* extra right padding for scroll zone */
-  border-radius: 8px;
+.venue-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--brand-600);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 200ms ease;
+  border-radius: 0 2px 2px 0;
 }
-
-/* default external item styling (applies on all viewports) */
-.fc-external {
-  background: linear-gradient(180deg, silver, grey);
-  box-shadow: 0px 1px 0px 2.5px;
-  border-radius: 6px;
-  padding: 8px 10px;
-  margin: 6px 0;
-  border: 1px solid #dfe9ff;
-  font-weight: bolder;
-  cursor: grab;
-  /* make each item a bit narrower than the container so there’s
-     a gap on the right for the finger when scrolling */
-  width: calc(100% - 12px);
-  box-sizing: border-box;
-  /* mobile / touch: ensure pointer events go to the draggable item (prevent container/page panning) */
-  touch-action: none;
-  -ms-touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
+.venue-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--slate-300);
+  transform: translateY(-1px);
+}
+.venue-card:hover::before {
+  transform: scaleY(1);
 }
 
-.fc-external-disabled {
-  background: #f5f5f5;
-  color: #888;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 8px 10px;
-  margin: 6px 0;
-  width: calc(100% - 12px);
-  box-sizing: border-box;
+.venue-card-index {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--brand-50);
+  border: 1px solid var(--brand-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--brand-600);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
 }
 
-/* for very narrow screens, make each draggable item half the container
-   width so a finger can fit beside it. the sidebar remains fixed width so
-   it doesn't trigger horizontal scrolling later in the layout */
-@media (max-width: 640px) {
-  .fc-external {
-    width: 50% !important;
+.venue-card-body {
+  flex: 1;
+  min-width: 0;
+}
+.venue-card-name {
+  margin: 0 0 3px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.venue-card-meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.venue-card-arrow {
+  color: var(--text-subtle);
+  font-size: 1rem;
+  transition:
+    transform 200ms ease,
+    color 200ms ease;
+}
+.venue-card:hover .venue-card-arrow {
+  transform: translateX(3px);
+  color: var(--brand-600);
+}
+
+/* --- News Feed --------------------------------------------------------- */
+.news-feed {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.news-feed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.news-feed h3 {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.news-feed-live {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--success);
+}
+.news-feed-live::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
   }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.news-feed-intro {
+  padding: 12px 20px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+  background: var(--surface-raised);
+}
+.news-feed-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 440px;
+  overflow-y: auto;
+}
+.news-feed-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background 150ms ease;
+}
+.news-feed-item:last-child {
+  border-bottom: none;
+}
+.news-feed-item:hover {
+  background: var(--surface-raised);
+}
+.news-feed-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand-600);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.news-feed-content {
+  flex: 1;
+  min-width: 0;
+}
+.news-feed-time {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-subtle);
+  letter-spacing: 0.02em;
+  margin-bottom: 2px;
+}
+.news-feed-message {
+  display: block;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* --- Site Footer ------------------------------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--text-subtle);
+  font-size: 0.8rem;
+  background: var(--surface);
+}
+.site-footer-dot {
+  color: var(--border);
+}
+
+/* --- App Shell (Calendar view) ----------------------------------------- */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.app-header-inner {
+  width: min(100%, 1520px);
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.app-header-logo-icon {
+  width: 28px;
+  height: 28px;
+  background: var(--brand-600);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.app-header-logo-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: -0.01em;
+}
+
+.app-header-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.app-header-title {
+  flex: 1;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-main {
+  flex: 1;
+  width: min(100%, 1520px);
+  margin: 0 auto;
+  padding: 24px 28px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Keep legacy app-container for safety */
+.app-container {
+  width: min(100%, 1520px);
+  margin: 0 auto;
+  padding: 24px 28px 48px;
+}
+
+/* --- Layout ------------------------------------------------------------ */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+/* --- Band Sidebar ------------------------------------------------------ */
+.external-container {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow-y: auto;
+  max-height: 80vh;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pan-y;
+  -ms-touch-action: pan-x pan-y;
+  position: relative;
+}
+.external-container-header {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.external-container h3 {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.external-container-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fc-external,
+.fc-external-disabled {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 42px;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: -0.01em;
+  transition: all 180ms ease;
+  box-sizing: border-box;
+  position: relative;
+  text-align: left;
+}
+
+.fc-external {
+  background: var(--brand-50);
+  color: var(--brand-700);
+  cursor: grab;
+  border: 1px solid var(--brand-100);
+}
+.fc-external:hover {
+  background: var(--brand-100);
+  border-color: var(--brand-600);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
 }
 .fc-external:active {
   cursor: grabbing;
-  touch-action: none;
+  transform: translateY(0);
 }
 
-/* while dragging, prevent the browser from converting the gesture into a
-   page/container scroll so touchmove events remain cancelable (prevents the
-   "cancelable=false" console warning). */
+.fc-external-disabled {
+  background: var(--surface-raised);
+  color: var(--text-subtle);
+  border: 1px solid var(--border);
+  cursor: not-allowed;
+}
+
+.hint {
+  padding: 12px 14px;
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+}
+
+/* --- Drag helpers ------------------------------------------------------ */
 html.is-dragging,
 body.is-dragging {
   touch-action: none !important;
@@ -107,10 +626,6 @@ body.is-dragging {
   -webkit-user-select: none !important;
   user-select: none !important;
 }
-
-/* Ensure the FullCalendar drag mirror / moving-event elements are touch-friendly
-   so touchmove remains cancelable while dragging. Mirrors are appended to
-   document.body by the interaction plugin (fc-event-mirror / fc-event-dragging). */
 .fc-event-mirror,
 .fc-event-dragging,
 .fc-event.fc-event-mirror,
@@ -121,425 +636,425 @@ body.is-dragging {
   user-select: none !important;
   -webkit-user-drag: none !important;
 }
-
-/* make sure child elements of the mirror inherit touch-action so the
-   browser does not treat the gesture as a scroll */
 .fc-event-mirror * {
   touch-action: none !important;
 }
-
-/* Sidebar is horizontally scrollable on small screens — allow both
-   horizontal and vertical panning so that draggable items can be moved
-   vertically (e.g. onto the calendar) while still permitting a touch
-   scrollbar. We continue to rely on the JS `is-dragging` class to disable
-   scrolling during an active drag. */
-.external-container {
-  /* enable vertical touches as well; the script prevents scrolling during
-     an active drag so we won't fight the browser */
-  touch-action: pan-x pan-y;
-  -ms-touch-action: pan-x pan-y;
-  /* allow the list to scroll if it's taller than the viewport */
-  overflow-y: auto;
-  max-height: 80vh;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Calendar area should primarily pan vertically — prevent horizontal
-   interpretation while dragging/resizing inside the calendar. */
 .calendar-container,
 .calendar-scroll-wrapper,
 .calendar-container .fc {
   touch-action: pan-y;
   -ms-touch-action: pan-y;
 }
-.hint {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 8px;
-}
+
+/* --- Calendar Container ------------------------------------------------ */
 .calendar-container {
-  flex: 1;
-  background: #fff;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #eee;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 16px;
+  overflow: hidden;
 }
 
-/* Make the calendar vertically scrollable and default to evening hours */
 .calendar-scroll-wrapper {
-  /* responsive height: allow the calendar to fill most of the viewport without exceeding it */
-  height: clamp(360px, 68vh, 920px);
-  min-height: 320px;
+  height: clamp(400px, 68vh, 920px);
+  min-height: 360px;
   max-height: 92vh;
 }
-
-/* Ensure FullCalendar uses parent height so the time-grid becomes scrollable */
 .calendar-scroll-wrapper .fc {
   height: 100%;
 }
 
-/* Ensure event titles wrap so band names remain visible in narrow time slots */
+/* FullCalendar overrides for corporate look */
+.fc .fc-toolbar-title {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+  color: var(--text) !important;
+}
+.fc .fc-button {
+  font-family: inherit !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  border-radius: var(--radius-sm) !important;
+}
+.fc .fc-button-primary {
+  background: var(--brand-600) !important;
+  border-color: var(--brand-600) !important;
+}
+.fc .fc-button-primary:hover {
+  background: var(--brand-700) !important;
+  border-color: var(--brand-700) !important;
+}
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  background: var(--brand-700) !important;
+  border-color: var(--brand-700) !important;
+}
+.fc .fc-event {
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  border-radius: 4px !important;
+}
 .fc .fc-event,
 .fc .fc-event-main {
   white-space: normal;
   overflow-wrap: anywhere;
 }
-
 .fc .fc-event-title,
 .fc .fc-event-time {
   white-space: normal;
   overflow-wrap: anywhere;
 }
-
-/* Make the event text a bit smaller so it fits better in narrow blocks */
-.fc .fc-event {
-  font-size: 0.85rem;
-  line-height: 1.2;
+.fc .fc-col-header-cell-cushion {
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  color: var(--text-muted) !important;
+}
+.fc .fc-timegrid-slot-label-cushion {
+  font-size: 0.72rem !important;
+  color: var(--text-subtle) !important;
+  font-weight: 500 !important;
+}
+.fc .fc-daygrid-day-number {
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  color: var(--text-muted) !important;
+}
+.fc .fc-day-today .fc-daygrid-day-number {
+  color: var(--brand-600) !important;
+}
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+  border-color: var(--border) !important;
 }
 
-h1 {
-  margin: 0 0 12px 0;
-  background-color: silver;
-  box-shadow: 0px 2px 0px 5px rgb(18, 13, 13);
-  border-radius: 5px;
-  text-align: center;
-  padding: 10px 0px 10px 0px;
-  color: rgb(34, 44, 44);
-}
-
-/* emoji groups inside the H1 — hide on small screens */
-.h1-emoji {
-  display: inline-block;
-  margin: 0 6px;
-  line-height: 1;
-  vertical-align: middle;
-  font-size: 1.06em; /* keep emoji visually balanced */
-}
-small {
-  text-align: center;
-  font-weight: 900;
-}
-
-/* landing page */
-.landing-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh; /* fill viewport so footer can be pushed down */
-  text-align: center;
-  width: min(95%, 1280px);
-  max-width: 1280px;
-  margin: 0 auto;
-  /* Reduce overall interior spacing by ~15% for a tighter landing layout */
-  padding: 34px 17px;
-}
-
-@media (max-width: 720px) {
-  .landing-container {
-    padding: 24px 12px;
-  }
-
-  .landing-columns {
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .landing-container .room-list {
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-/* push footer to bottom of landing page */
-.landing-container .app-footer {
-  margin-top: auto;
-}
-.landing-container .room-list {
-  list-style: none;
-  padding: 2%;
-  background-color: whitesmoke;
-  border-radius: 15px;
-  max-width: fit-content;
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  text-align: left;
-  scroll-behavior: auto;
-  box-shadow: 0 0.5px 2px rgba(2, 6, 23, 0.2);
-}
-.landing-container .room-list li {
-  margin: 8px 0;
-  background-color: silver;
-  box-shadow: 0px 2px 0px 5px rgb(18, 13, 13);
-  border-radius: 5px;
-
-  /* Consistent button width on desktop, allow multiple lines for long names */
-  width: 220px;
-  max-width: 220px;
-  white-space: normal;
-  word-wrap: break-word;
-}
-
-/* Make the full item clickable by letting the link fill the li */
-.landing-container .room-list li a {
-  display: block;
-  width: 100%;
-  height: 100%;
-  padding: 1rem;
-  text-align: center;
-  color: inherit;
-  text-decoration: none;
-}
-
-.landing-container .room-list li a:hover {
-  text-decoration: none;
-}
-
-@media (max-width: 720px) {
-  .landing-container .room-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1.25rem;
-    max-width: 100%;
-  }
-
-  .landing-container .room-list li {
-    margin: 0;
-    width: calc(48% - 0.5rem);
-    min-width: 140px;
-  }
-}
-
-.landing-container .room-list li:hover {
-  box-shadow: 0px 0.5px 0px 3px rgb(18, 13, 13);
-  transition: 200ms;
-}
-
-.landing-container a {
-  color: rgb(34, 44, 44);
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* Landing page layout */
-.landing-columns {
-  display: flex;
-  gap: 2rem;
+/* --- Buttons ----------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  margin-top: 1.5rem;
+  gap: 6px;
+  background: var(--brand-600);
+  color: #fff;
+  border: 1px solid transparent;
+  padding: 9px 18px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  min-height: 38px;
+  letter-spacing: -0.01em;
+  transition:
+    background 150ms,
+    box-shadow 150ms,
+    transform 150ms;
+  box-shadow:
+    var(--shadow-xs),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn:hover {
+  background: var(--brand-700);
+  box-shadow: var(--shadow-sm);
+}
+.btn:active {
+  transform: translateY(1px);
 }
 
-.news-feed {
-  max-width: 420px;
+.btn-danger {
+  background: var(--danger);
+  box-shadow: var(--shadow-xs);
+}
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border);
+  box-shadow: none;
+}
+.btn-ghost:hover {
+  background: var(--surface-raised);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  min-height: 32px;
+}
+
+/* Back-to-landing */
+.back-to-landing {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+/* --- Modal ------------------------------------------------------------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  padding: 16px;
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  padding: 28px;
   width: 100%;
-  background-color: whitesmoke;
-  border-radius: 15px;
-  padding: 1rem 1rem 1rem 1rem;
-  box-shadow: 0 0.5px 2px rgba(2, 6, 23, 0.2);
+  max-width: 480px;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border);
+  position: relative;
+}
+.modal h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.modal p {
+  margin: 0 0 12px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.modal-row {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.modal-actions-right {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+@media (max-width: 480px) {
+  .modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .modal-actions-right {
+    display: flex;
+    gap: 8px;
+  }
+  .modal-actions-right .btn {
+    flex: 1;
+  }
 }
 
-.news-feed h3 {
-  margin: 0 0 0.6rem 0;
-}
-
-.news-feed-intro {
-  margin: 0 0 1rem 0;
-  font-size: 0.95rem;
-  color: var(--muted);
-}
-
-.news-feed-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 360px;
-  overflow-y: auto;
-}
-
-.news-feed-item {
-  padding: 0.8rem 0.9rem;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  margin-bottom: 0.6rem;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.news-feed-time {
+/* --- Inputs ------------------------------------------------------------ */
+.text-input {
   display: block;
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 0.25rem;
+  width: 100%;
+  margin-top: 6px;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  color: var(--text);
+  transition:
+    border-color 150ms,
+    box-shadow 150ms,
+    background 150ms;
+}
+.text-input::placeholder {
+  color: var(--text-subtle);
+}
+.text-input:focus {
+  outline: none;
+  border-color: var(--brand-600);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(192, 30, 46, 0.12);
 }
 
-.news-feed-message {
-  display: block;
-  font-size: 0.95rem;
+.reschedule {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+@media (max-width: 480px) {
+  .reschedule {
+    grid-template-columns: 1fr;
+  }
+}
+.reschedule label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+.reschedule input[type="datetime-local"],
+.reschedule input[type="date"] {
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition:
+    border-color 150ms,
+    box-shadow 150ms;
+}
+.reschedule input:focus {
+  outline: none;
+  border-color: var(--brand-600);
+  box-shadow: 0 0 0 3px rgba(192, 30, 46, 0.12);
 }
 
-/* Toasts */
+/* --- Notice / Alert ---------------------------------------------------- */
+.notice {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--slate-50);
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* --- Toast ------------------------------------------------------------- */
 .toast-viewport {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
+  right: 20px;
+  bottom: 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   z-index: 9999;
 }
+
 .toast {
-  background: #111;
+  background: var(--slate-900);
   color: #fff;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.2);
-  min-width: 220px;
+  gap: 10px;
+  box-shadow: var(--shadow-xl);
+  min-width: 260px;
+  max-width: 380px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  animation: toast-in 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 .toast-message {
   flex: 1;
-  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 .toast-action {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
   color: #fff;
-  padding: 6px 8px;
-  border-radius: 6px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: background 150ms;
+  flex-shrink: 0;
+}
+.toast-action:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 .toast-close {
   background: transparent;
   border: 0;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 18px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
   line-height: 1;
-  padding: 0 6px;
+  padding: 0 2px;
   cursor: pointer;
+  transition: color 150ms;
+  flex-shrink: 0;
 }
-
-/* Modal */
-.modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-.modal {
-  background: #fff;
-  border-radius: 10px;
-  padding: 18px;
-  min-width: 320px;
-  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.2);
-}
-.modal h3 {
-  margin: 0 0 8px;
-}
-.modal-row {
-  color: var(--muted);
-  margin-bottom: 12px;
-}
-.modal-actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.text-input {
-  width: 100%;
-  margin-top: 8px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-.btn {
-  background: #b12c14;
+.toast-close:hover {
   color: #fff;
-  border: 0;
-  padding: 8px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 5em;
-}
-.btn-danger {
-  background: #d9534f;
-}
-.reschedule {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.reschedule input[type="date"] {
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
 }
 
-.notice {
-  background: #fff4e5;
-  border: 1px solid #ffd7a8;
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 13px;
-}
-
-.back-to-landing {
-  display: flex;
-  justify-content: center;
-  margin: 8px 0 16px;
-}
-
-.back-to-landing .btn {
-  padding: 8px 14px;
-  font-size: 0.95rem;
-}
-.back-to-landing a {
-  text-decoration: none;
-  font-weight: 400;
-}
-
+/* --- App Footer -------------------------------------------------------- */
 .app-footer {
-  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding: 16px 28px;
   text-align: center;
-  color: rgb(34, 44, 44);
-  padding: 10px 0;
-  font-size: 13px;
+  color: var(--text-subtle);
+  font-size: 0.78rem;
+  margin-top: 24px;
+  background: var(--surface);
 }
 
-/* Responsive layout */
-/* Consolidated: use the 1100px breakpoint for tablet+ stacking (900px block removed) */
+/* Legacy small */
+small {
+  color: var(--text-subtle);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
 
-/* Wider breakpoint so the app becomes responsive earlier on laptops/tablets */
+/* --- Responsive -------------------------------------------------------- */
 @media (max-width: 1100px) {
-  .app-container {
-    max-width: 100%;
-    margin: 12px;
-    padding: 12px;
+  .app-main {
+    padding: 20px 20px 40px;
   }
   .layout {
-    flex-direction: column;
-    gap: 10px;
+    grid-template-columns: 1fr;
   }
   .external-container {
-    width: 100%;
-    flex: none;
-    order: 1;
-    max-height: 160px;
-    overflow: auto;
+    max-height: none;
+    overflow: visible;
   }
-  .calendar-container {
-    order: 2;
-    padding: 10px;
-  }
-
-  /* Force FullCalendar toolbar to wrap earlier and keep title centered */
   .calendar-container .fc .fc-header-toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -558,129 +1073,66 @@ small {
   .calendar-container .fc .fc-toolbar-title {
     white-space: normal;
     text-align: center;
-    font-size: 1.05rem;
-    margin: 0 6px;
+    font-size: 0.95rem !important;
     overflow-wrap: anywhere;
   }
   .calendar-container .fc .fc-button-group {
     flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  /* keep grid natural width on tablet/desktop; horizontal scroll only on very small screens */
-  .calendar-container .fc .fc-scrollgrid {
-    /* no forced min-width or horizontal scroll here to avoid overflow */
-    overflow-x: visible;
+    gap: 4px;
   }
 }
-
+@media (max-width: 860px) {
+  .landing-body {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .fc-external {
+    width: 100% !important;
+  }
+  .landing-main {
+    padding: 32px 16px 60px;
+  }
+  .app-main {
+    padding: 16px 16px 40px;
+  }
+  .app-header-inner {
+    padding: 0 16px;
+  }
+  .app-header-logo-text {
+    display: none;
+  }
+  .site-header-inner {
+    padding: 0 16px;
+  }
+  .site-logo-name {
+    display: none;
+  }
+  .modal {
+    padding: 20px 18px;
+  }
+}
 @media (max-width: 480px) {
-  :root {
-    font-size: 14px;
+  .hero-title {
+    font-size: 1.75rem;
   }
-
-  /* hide decorative emoji in the H1 on small screens to tidy the header */
-  .h1-emoji {
-    display: none !important;
+  .hero-subtitle {
+    font-size: 0.95rem;
   }
-
-  /* give the page more usable width on tiny screens */
-  .app-container {
-    margin: 8px;
+  .site-header-badge {
+    display: none;
+  }
+  .calendar-container {
     padding: 10px;
   }
-  .layout {
-    gap: 8px;
-  }
-
-  /* compact sidebar but keep available horizontally if needed */
-  .external-container {
-    padding: 8px;
-    max-height: 140px;
-    overflow-x: auto;
-  }
   .fc-external {
-    padding: 6px 8px;
-    font-size: 13px;
-    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 0.82rem;
   }
-
-  /* reduce calendar padding and allow horizontal scrolling instead of shrinking columns */
-  .calendar-container {
-    padding: 6px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .news-feed-list {
+    max-height: 300px;
   }
-  .calendar-container .fc .fc-scrollgrid {
-    min-width: 0; /* allow grid to shrink; horizontal scroll will appear only if content requires it */
-    max-width: 100%;
-  }
-
-  /* stack weekday + date but keep each part unbroken */
-  .calendar-container .fc .fc-col-header-cell-cushion {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 2px !important;
-    white-space: normal !important; /* allow compact wrapping */
-    padding: 2px 6px !important;
-    font-size: 11px !important;
-    line-height: 1 !important;
-  }
-  .calendar-container .fc .fc-daygrid-day-number {
-    font-weight: 600;
-    white-space: normal !important;
-    font-size: 11px !important;
-  }
-  .calendar-container .fc .fc-col-header-cell {
-    padding: 2px 4px !important;
-  }
-
-  .modal {
-    padding: 12px;
-    min-width: 280px;
-  }
-  .app-footer {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 380px) {
-  /* compact, horizontally-scrollable sidebar for the smallest phones.
-     moved out of nested media and widened slightly to avoid a 361px gap. */
-  .external-container {
-    display: block;
-    width: 100%;
-    max-height: 80px;
-    min-height: 48px;
-    padding: 6px 4px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    white-space: nowrap;
-    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.03);
-    border-radius: 6px;
-  }
-  .external-container h3 {
-    display: inline-block;
-    margin-right: 8px;
-    vertical-align: middle;
-    font-size: 14px;
-  }
-  .external-container .fc-external {
-    display: inline-flex !important;
-    vertical-align: middle;
-    margin: 4px 8px 4px 0;
-    min-width: 100px;
-    padding: 6px 10px;
-    white-space: nowrap;
-    touch-action: none;
-  }
-  .app-container {
-    margin: 6px;
-    padding: 8px;
-  }
-  .calendar-container .fc .fc-scrollgrid {
-    min-width: 0;
-    max-width: 100%;
+  .venue-card {
+    padding: 14px 16px;
   }
 }

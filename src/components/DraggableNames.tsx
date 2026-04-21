@@ -97,27 +97,30 @@ export default function DraggableNames({
 
   return (
     <div className="external-container" ref={containerRef}>
-      <h3>Bands (trekk og slipp i kalenderen)</h3>
-      {bandList.map((band) => {
-        const isDraggable = guestMode && guestBand === band;
-        return isDraggable ? (
-          <div key={band} className="fc-external" data-name={band}>
-            {band}
-          </div>
-        ) : (
-          <div key={band} className="fc-external-disabled" aria-disabled="true">
-            {band}
-          </div>
-        );
-      })}
-      <strong>Booking</strong>
+      <div className="external-container-header">
+        <h3>Band</h3>
+      </div>
+      <div className="external-container-body">
+        {bandList.map((band) => {
+          const isDraggable = guestMode && guestBand === band;
+          return isDraggable ? (
+            <div key={band} className="fc-external" data-name={band}>
+              {band}
+            </div>
+          ) : (
+            <div
+              key={band}
+              className="fc-external-disabled"
+              aria-disabled="true"
+            >
+              {band}
+            </div>
+          );
+        })}
+      </div>
       <p className="hint">
-        Dra bandet ditt til et tidsrom for å lage en falsk booking. Bare ditt
-        band er interaktivt i denne demoen.
-      </p>
-      <strong>Slette Booking</strong>
-      <p className="hint">
-        Trykk på din egen booking i kalenderen for å fjerne den.
+        Dra bandet ditt til et tidsrom i kalenderen for å lage en booking. Kun
+        ditt band er interaktivt i demoen.
       </p>
     </div>
   );

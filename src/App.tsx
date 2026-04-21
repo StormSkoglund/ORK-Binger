@@ -52,32 +52,37 @@ export default function App() {
   const [bandInput, setBandInput] = useState(guestBand || "");
 
   return (
-    <div className="app-container">
-      <h1>
-        <span className="h1-emoji" aria-hidden="true"></span>
-        {appTitle}
-        <span className="h1-emoji" aria-hidden="true"></span>
-      </h1>
-
-      {(path !== "" && path !== "/") || hasCalParam ? (
-        <div className="back-to-landing">
-          <a className="btn" href="/">
-            ← Tilbake til oversikt
+    <div className="app-shell">
+      {/* App header */}
+      <header className="app-header">
+        <div className="app-header-inner">
+          <a href="/" className="app-header-logo">
+            <span className="app-header-logo-icon">♩</span>
+            <span className="app-header-logo-text">Musikkbingene Os</span>
           </a>
+          <span className="app-header-divider" />
+          <h1 className="app-header-title">{appTitle}</h1>
+          {((path !== "" && path !== "/") || hasCalParam) && (
+            <a className="btn btn-sm btn-ghost" href="/">
+              ← Oversikt
+            </a>
+          )}
         </div>
-      ) : null}
+      </header>
 
-      <div className="layout">
-        <DraggableNames guestBand={guestBand} guestMode={guestMode} />
-        <Calendar
-          guestBand={guestBand}
-          guestMode={guestMode}
-          guestEvents={guestEvents}
-          addGuestBooking={addGuestBooking}
-          updateGuestBooking={updateGuestBooking}
-          removeGuestBooking={removeGuestBooking}
-        />
-      </div>
+      <main className="app-main">
+        <div className="layout">
+          <DraggableNames guestBand={guestBand} guestMode={guestMode} />
+          <Calendar
+            guestBand={guestBand}
+            guestMode={guestMode}
+            guestEvents={guestEvents}
+            addGuestBooking={addGuestBooking}
+            updateGuestBooking={updateGuestBooking}
+            removeGuestBooking={removeGuestBooking}
+          />
+        </div>
+      </main>
 
       {!isAdmin && guestIntroOpen && (
         <div className="modal-backdrop" onClick={() => {}}>
@@ -117,7 +122,9 @@ export default function App() {
       )}
 
       <footer className="app-footer" role="contentinfo">
-        <small>© {new Date().getFullYear()} Alex Storm Skoglund</small>
+        <small>
+          © {new Date().getFullYear()} Alex Storm Skoglund — Musikkbingene Os
+        </small>
       </footer>
     </div>
   );

@@ -70,10 +70,7 @@ export default function BookingModal({
             : "—"}
         </div>
         {canEdit ? (
-          <div className="modal-actions">
-            <button className="btn btn-danger" onClick={onDeleteRequested}>
-              Cancel booking
-            </button>
+          <>
             <div className="reschedule">
               <label>
                 Start:
@@ -93,24 +90,31 @@ export default function BookingModal({
                   id={`reschedule-end-${modalEvent.id}`}
                 />
               </label>
-              <button
-                className="btn"
-                onClick={() => {
-                  if (startValue)
-                    onReschedule(
-                      modalEvent.id,
-                      new Date(startValue).toISOString(),
-                      endValue ? new Date(endValue).toISOString() : undefined,
-                    );
-                }}
-              >
-                Save
-              </button>
             </div>
-            <button className="btn" onClick={onClose}>
-              Close
-            </button>
-          </div>
+            <div className="modal-actions">
+              <button className="btn btn-danger" onClick={onDeleteRequested}>
+                Cancel booking
+              </button>
+              <div className="modal-actions-right">
+                <button
+                  className="btn"
+                  onClick={() => {
+                    if (startValue)
+                      onReschedule(
+                        modalEvent.id,
+                        new Date(startValue).toISOString(),
+                        endValue ? new Date(endValue).toISOString() : undefined,
+                      );
+                  }}
+                >
+                  Save
+                </button>
+                <button className="btn" onClick={onClose}>
+                  Close
+                </button>
+              </div>
+            </div>
+          </>
         ) : (
           <div
             className="modal-actions"

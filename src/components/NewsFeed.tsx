@@ -123,22 +123,33 @@ export default function NewsFeed() {
 
   return (
     <section className="news-feed" aria-label="Nyheter">
-      <h3>Nyheter</h3>
+      <div className="news-feed-header">
+        <h3>Aktivitetslogg</h3>
+        <span className="news-feed-live">Live</span>
+      </div>
       <p className="news-feed-intro">
-        Her ser du nye bookinger og endringer i musikkbingene denne uken.
+        Nye bookinger og endringer fra alle musikkbingene vises her i sanntid.
       </p>
       <ol className="news-feed-list">
         {feedItems.length === 0 ? (
           <li className="news-feed-item">
-            <span>Ingen nye hendelser akkurat nå.</span>
+            <div className="news-feed-dot" />
+            <div className="news-feed-content">
+              <span className="news-feed-message">
+                Ingen nye hendelser akkurat nå.
+              </span>
+            </div>
           </li>
         ) : (
           feedItems.map((item) => (
             <li key={item.id} className="news-feed-item">
-              <span className="news-feed-time">
-                {formatDateTime(item.time)}
-              </span>
-              <span className="news-feed-message">{item.message}</span>
+              <div className="news-feed-dot" />
+              <div className="news-feed-content">
+                <span className="news-feed-time">
+                  {formatDateTime(item.time)}
+                </span>
+                <span className="news-feed-message">{item.message}</span>
+              </div>
             </li>
           ))
         )}
