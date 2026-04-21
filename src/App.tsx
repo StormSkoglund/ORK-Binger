@@ -53,11 +53,7 @@ export default function App() {
 
   return (
     <div className="app-container">
-      <h1>
-        <span className="h1-emoji" aria-hidden="true">🎵</span>
-        {appTitle}
-        <span className="h1-emoji" aria-hidden="true">📅</span>
-      </h1>
+      <h1>{appTitle}</h1>
 
       {(path !== "" && path !== "/") || hasCalParam ? (
         <div className="back-to-landing">
