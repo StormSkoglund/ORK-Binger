@@ -54,9 +54,9 @@ export default function App() {
   return (
     <div className="app-container">
       <h1>
-        <span className="h1-emoji" aria-hidden="true"></span>
+        <span className="h1-emoji" aria-hidden="true">🎵</span>
         {appTitle}
-        <span className="h1-emoji" aria-hidden="true"></span>
+        <span className="h1-emoji" aria-hidden="true">📅</span>
       </h1>
 
       {(path !== "" && path !== "/") || hasCalParam ? (

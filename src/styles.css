@@ -1,104 +1,141 @@
+﻿:root {
+  --bg: #eef4ff;
+  --surface: rgba(255, 255, 255, 0.86);
+  --surface-strong: #ffffff;
+  --text: #102a43;
+  --muted: #5b7083;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --danger: #dc2626;
+  --border: rgba(148, 163, 184, 0.24);
+  --shadow: 0 28px 70px rgba(15, 23, 42, 0.08);
+  --radius: 24px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
-:root {
-  --accent: #0b5fff;
-  --muted: #666;
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial;
-}
-body {
-  margin: 0;
-  /* A soft neutral background that works well with silver cards and dark text */
-  background: #f3f4f6;
-  color: #111;
-}
-.app-container {
-  /* Let the layout expand more on wide screens while still capping max width */
-  width: min(96%, 1600px);
-  max-width: 1600px;
-  margin: 24px auto;
-  padding: 17px;
-}
-.layout {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-  min-width: 0; /* allow children to shrink */
-  flex-wrap: wrap; /* allow sidebar/calendar to wrap on narrow widths */
-}
-.external-container {
-  /* keep the sidebar at its original desktop width; we will shrink the
-     individual items on small viewports instead of touching the container. */
-  width: 220px;
-  flex: 0 0 220px;
-  min-width: 140px;
-  background: #fff;
-  border: 1px solid #eee;
-  padding: 12px 20px 12px 12px; /* extra right padding for scroll zone */
-  border-radius: 8px;
+
+html {
+  scroll-behavior: smooth;
 }
 
-/* default external item styling (applies on all viewports) */
-.fc-external {
-  background: linear-gradient(180deg, silver, grey);
-  box-shadow: 0px 1px 0px 2.5px;
-  border-radius: 6px;
-  padding: 8px 10px;
-  margin: 6px 0;
-  border: 1px solid #dfe9ff;
-  font-weight: bolder;
-  cursor: grab;
-  /* make each item a bit narrower than the container so there’s
-     a gap on the right for the finger when scrolling */
-  width: calc(100% - 12px);
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #f7fbff 0%, #dbeafe 35%, #edf2ff 100%);
+  color: var(--text);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.app-container {
+  width: min(96%, 1440px);
+  max-width: 1440px;
+  margin: 28px auto;
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+h1 {
+  margin: 0 0 18px 0;
+  line-height: 1.05;
+  font-size: clamp(2.2rem, 4vw, 3.3rem);
+  text-align: center;
+  letter-spacing: -0.04em;
+  color: #0f172a;
+}
+
+.h1-emoji {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.7rem;
+  font-size: 1.05em;
+  line-height: 1;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.external-container {
+  width: 100%;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border: 1px solid rgba(37, 99, 235, 0.14);
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.external-container h3 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+.fc-external,
+.fc-external-disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  border-radius: 16px;
+  padding: 10px 14px;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
   box-sizing: border-box;
-  /* mobile / touch: ensure pointer events go to the draggable item (prevent container/page panning) */
-  touch-action: none;
-  -ms-touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
+}
+
+.fc-external {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #fff;
+  cursor: grab;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.12);
+}
+
+.fc-external:active,
+.fc-external:hover {
+  transform: translateY(-1px);
 }
 
 .fc-external-disabled {
-  background: #f5f5f5;
-  color: #888;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 8px 10px;
-  margin: 6px 0;
-  width: calc(100% - 12px);
-  box-sizing: border-box;
+  background: rgba(15, 23, 42, 0.04);
+  color: #64748b;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  cursor: not-allowed;
 }
 
-/* for very narrow screens, make each draggable item half the container
-   width so a finger can fit beside it. the sidebar remains fixed width so
-   it doesn't trigger horizontal scrolling later in the layout */
 @media (max-width: 640px) {
   .fc-external {
-    width: 50% !important;
+    width: 100% !important;
   }
 }
+
 .fc-external:active {
   cursor: grabbing;
-  touch-action: none;
 }
 
-/* while dragging, prevent the browser from converting the gesture into a
-   page/container scroll so touchmove events remain cancelable (prevents the
-   "cancelable=false" console warning). */
 html.is-dragging,
 body.is-dragging {
   touch-action: none !important;
@@ -108,9 +145,6 @@ body.is-dragging {
   user-select: none !important;
 }
 
-/* Ensure the FullCalendar drag mirror / moving-event elements are touch-friendly
-   so touchmove remains cancelable while dragging. Mirrors are appended to
-   document.body by the interaction plugin (fc-event-mirror / fc-event-dragging). */
 .fc-event-mirror,
 .fc-event-dragging,
 .fc-event.fc-event-mirror,
@@ -122,63 +156,50 @@ body.is-dragging {
   -webkit-user-drag: none !important;
 }
 
-/* make sure child elements of the mirror inherit touch-action so the
-   browser does not treat the gesture as a scroll */
 .fc-event-mirror * {
   touch-action: none !important;
 }
 
-/* Sidebar is horizontally scrollable on small screens — allow both
-   horizontal and vertical panning so that draggable items can be moved
-   vertically (e.g. onto the calendar) while still permitting a touch
-   scrollbar. We continue to rely on the JS `is-dragging` class to disable
-   scrolling during an active drag. */
 .external-container {
-  /* enable vertical touches as well; the script prevents scrolling during
-     an active drag so we won't fight the browser */
   touch-action: pan-x pan-y;
   -ms-touch-action: pan-x pan-y;
-  /* allow the list to scroll if it's taller than the viewport */
   overflow-y: auto;
   max-height: 80vh;
   -webkit-overflow-scrolling: touch;
 }
 
-/* Calendar area should primarily pan vertically — prevent horizontal
-   interpretation while dragging/resizing inside the calendar. */
 .calendar-container,
 .calendar-scroll-wrapper,
 .calendar-container .fc {
   touch-action: pan-y;
   -ms-touch-action: pan-y;
 }
+
 .hint {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 8px;
-}
-.calendar-container {
-  flex: 1;
-  background: #fff;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #eee;
+  font-size: 0.92rem;
+  color: #64748b;
+  margin-top: 14px;
+  line-height: 1.55;
 }
 
-/* Make the calendar vertically scrollable and default to evening hours */
+.calendar-container {
+  background: var(--surface-strong);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 28px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.06);
+  padding: 16px;
+}
+
 .calendar-scroll-wrapper {
-  /* responsive height: allow the calendar to fill most of the viewport without exceeding it */
-  height: clamp(360px, 68vh, 920px);
-  min-height: 320px;
+  height: clamp(380px, 68vh, 920px);
+  min-height: 340px;
   max-height: 92vh;
 }
 
-/* Ensure FullCalendar uses parent height so the time-grid becomes scrollable */
 .calendar-scroll-wrapper .fc {
   height: 100%;
 }
 
-/* Ensure event titles wrap so band names remain visible in narrow time slots */
 .fc .fc-event,
 .fc .fc-event-main {
   white-space: normal;
@@ -191,355 +212,322 @@ body.is-dragging {
   overflow-wrap: anywhere;
 }
 
-/* Make the event text a bit smaller so it fits better in narrow blocks */
 .fc .fc-event {
-  font-size: 0.85rem;
-  line-height: 1.2;
+  font-size: 0.86rem;
+  line-height: 1.22;
 }
 
-h1 {
-  margin: 0 0 12px 0;
-  background-color: silver;
-  box-shadow: 0px 2px 0px 5px rgb(18, 13, 13);
-  border-radius: 5px;
-  text-align: center;
-  padding: 10px 0px 10px 0px;
-  color: rgb(34, 44, 44);
+h1,
+.landing-container h1 {
+  font-weight: 800;
 }
 
-/* emoji groups inside the H1 — hide on small screens */
-.h1-emoji {
-  display: inline-block;
-  margin: 0 6px;
-  line-height: 1;
-  vertical-align: middle;
-  font-size: 1.06em; /* keep emoji visually balanced */
-}
 small {
+  display: block;
   text-align: center;
-  font-weight: 900;
+  font-weight: 600;
+  color: #475569;
 }
 
-/* landing page */
 .landing-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* fill viewport so footer can be pushed down */
+  min-height: 100vh;
   text-align: center;
   width: min(95%, 1280px);
   max-width: 1280px;
   margin: 0 auto;
-  /* Reduce overall interior spacing by ~15% for a tighter landing layout */
-  padding: 34px 17px;
+  padding: 40px 18px;
+  gap: 24px;
 }
 
-@media (max-width: 720px) {
-  .landing-container {
-    padding: 24px 12px;
-  }
-
-  .landing-columns {
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .landing-container .room-list {
-    width: 100%;
-    max-width: 100%;
-  }
+.landing-container h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  letter-spacing: -0.05em;
+  color: #0f172a;
 }
 
-/* push footer to bottom of landing page */
-.landing-container .app-footer {
-  margin-top: auto;
+.landing-container h2 {
+  margin: 0;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  color: #475569;
+  max-width: 860px;
+  margin-inline: auto;
 }
-.landing-container .room-list {
+
+.landing-container p {
+  margin: 0 auto;
+  max-width: 760px;
+  color: #475569;
+  line-height: 1.8;
+}
+
+.landing-columns {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(320px, 420px);
+  gap: 24px;
+  align-items: start;
+}
+
+.room-list {
   list-style: none;
-  padding: 2%;
-  background-color: whitesmoke;
-  border-radius: 15px;
-  max-width: fit-content;
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  text-align: left;
-  scroll-behavior: auto;
-  box-shadow: 0 0.5px 2px rgba(2, 6, 23, 0.2);
-}
-.landing-container .room-list li {
-  margin: 8px 0;
-  background-color: silver;
-  box-shadow: 0px 2px 0px 5px rgb(18, 13, 13);
-  border-radius: 5px;
-
-  /* Consistent button width on desktop, allow multiple lines for long names */
-  width: 220px;
-  max-width: 220px;
-  white-space: normal;
-  word-wrap: break-word;
+  padding: 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+  border-radius: 28px;
+  box-shadow: 0 24px 45px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  display: grid;
+  gap: 14px;
 }
 
-/* Make the full item clickable by letting the link fill the li */
-.landing-container .room-list li a {
+.room-list li {
+  margin: 0;
+  background: #f8fbff;
+  border-radius: 18px;
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.room-list li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.room-list li a {
   display: block;
   width: 100%;
-  height: 100%;
-  padding: 1rem;
+  padding: 1.15rem 1rem;
   text-align: center;
-  color: inherit;
+  color: #0f172a;
   text-decoration: none;
-}
-
-.landing-container .room-list li a:hover {
-  text-decoration: none;
-}
-
-@media (max-width: 720px) {
-  .landing-container .room-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1.25rem;
-    max-width: 100%;
-  }
-
-  .landing-container .room-list li {
-    margin: 0;
-    width: calc(48% - 0.5rem);
-    min-width: 140px;
-  }
-}
-
-.landing-container .room-list li:hover {
-  box-shadow: 0px 0.5px 0px 3px rgb(18, 13, 13);
-  transition: 200ms;
+  font-weight: 700;
+  font-size: 1rem;
 }
 
 .landing-container a {
-  color: rgb(34, 44, 44);
+  color: #0f172a;
   text-decoration: none;
-  font-weight: bold;
-}
-
-/* Landing page layout */
-.landing-columns {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  margin-top: 1.5rem;
 }
 
 .news-feed {
-  max-width: 420px;
   width: 100%;
-  background-color: whitesmoke;
-  border-radius: 15px;
-  padding: 1rem 1rem 1rem 1rem;
-  box-shadow: 0 0.5px 2px rgba(2, 6, 23, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 28px;
+  padding: 24px;
+  box-shadow: 0 24px 45px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 .news-feed h3 {
-  margin: 0 0 0.6rem 0;
+  margin: 0 0 0.8rem 0;
+  font-size: 1.2rem;
 }
 
 .news-feed-intro {
-  margin: 0 0 1rem 0;
-  font-size: 0.95rem;
-  color: var(--muted);
+  margin: 0 0 1.25rem 0;
+  font-size: 1rem;
+  color: #627d98;
 }
 
 .news-feed-list {
   list-style: none;
   padding: 0;
   margin: 0;
-  max-height: 360px;
+  display: grid;
+  gap: 12px;
+  max-height: 420px;
   overflow-y: auto;
 }
 
 .news-feed-item {
-  padding: 0.8rem 0.9rem;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  margin-bottom: 0.6rem;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  border-radius: 20px;
+  background: #f8fbff;
+  border: 1px solid rgba(148, 163, 184, 0.16);
 }
 
 .news-feed-time {
   display: block;
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 0.25rem;
+  font-size: 0.92rem;
+  color: #64748b;
+  margin-bottom: 0.35rem;
 }
 
 .news-feed-message {
   display: block;
-  font-size: 0.95rem;
+  font-size: 0.97rem;
+  color: #334155;
 }
 
-/* Toasts */
 .toast-viewport {
   position: fixed;
   right: 18px;
   bottom: 18px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   z-index: 9999;
 }
+
 .toast {
-  background: #111;
+  background: #0f172a;
   color: #fff;
-  padding: 10px 12px;
-  border-radius: 8px;
+  padding: 14px 16px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.2);
-  min-width: 220px;
+  gap: 10px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+  min-width: 260px;
 }
-.toast-message {
-  flex: 1;
-  font-size: 13px;
-}
+
 .toast-action {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: #fff;
-  padding: 6px 8px;
-  border-radius: 6px;
+  padding: 8px 10px;
+  border-radius: 12px;
   cursor: pointer;
 }
+
 .toast-close {
   background: transparent;
   border: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.75);
   font-size: 18px;
   line-height: 1;
   padding: 0 6px;
   cursor: pointer;
 }
 
-/* Modal */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(15, 23, 42, 0.42);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
+
 .modal {
-  background: #fff;
-  border-radius: 10px;
-  padding: 18px;
-  min-width: 320px;
-  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.2);
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 26px;
+  min-width: 340px;
+  max-width: min(92vw, 480px);
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18);
 }
+
 .modal h3 {
-  margin: 0 0 8px;
+  margin: 0 0 10px 0;
+  color: #0f172a;
 }
-.modal-row {
-  color: var(--muted);
-  margin-bottom: 12px;
-}
+
 .modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.text-input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 16px;
+  font-size: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  color: #ffffff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+  font-weight: 700;
+  min-height: 44px;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(37, 99, 235, 0.22);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+}
+
+.reschedule {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.text-input {
-  width: 100%;
-  margin-top: 8px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-.btn {
-  background: #b12c14;
-  color: #fff;
-  border: 0;
-  padding: 8px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 5em;
-}
-.btn-danger {
-  background: #d9534f;
-}
-.reschedule {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+
 .reschedule input[type="date"] {
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
 }
 
 .notice {
-  background: #fff4e5;
-  border: 1px solid #ffd7a8;
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 13px;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  padding: 12px 14px;
+  border-radius: 18px;
+  font-size: 0.95rem;
 }
 
 .back-to-landing {
   display: flex;
   justify-content: center;
-  margin: 8px 0 16px;
+  margin: 12px 0 18px;
 }
 
 .back-to-landing .btn {
-  padding: 8px 14px;
-  font-size: 0.95rem;
+  padding: 12px 18px;
+  font-size: 0.98rem;
 }
+
 .back-to-landing a {
   text-decoration: none;
-  font-weight: 400;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 .app-footer {
-  margin-top: 20px;
+  margin-top: 30px;
   text-align: center;
-  color: rgb(34, 44, 44);
-  padding: 10px 0;
-  font-size: 13px;
+  color: #475569;
+  padding: 12px 0 0;
+  font-size: 0.94rem;
 }
 
-/* Responsive layout */
-/* Consolidated: use the 1100px breakpoint for tablet+ stacking (900px block removed) */
-
-/* Wider breakpoint so the app becomes responsive earlier on laptops/tablets */
 @media (max-width: 1100px) {
   .app-container {
     max-width: 100%;
-    margin: 12px;
-    padding: 12px;
+    margin: 16px;
+    padding: 20px;
   }
   .layout {
-    flex-direction: column;
-    gap: 10px;
+    grid-template-columns: 1fr;
   }
   .external-container {
-    width: 100%;
-    flex: none;
-    order: 1;
-    max-height: 160px;
-    overflow: auto;
+    max-height: none;
+    overflow: visible;
   }
   .calendar-container {
-    order: 2;
-    padding: 10px;
+    padding: 14px;
   }
-
-  /* Force FullCalendar toolbar to wrap earlier and keep title centered */
   .calendar-container .fc .fc-header-toolbar {
     display: flex;
     flex-wrap: wrap;
@@ -566,11 +554,23 @@ small {
     flex-wrap: wrap;
     gap: 6px;
   }
+}
 
-  /* keep grid natural width on tablet/desktop; horizontal scroll only on very small screens */
-  .calendar-container .fc .fc-scrollgrid {
-    /* no forced min-width or horizontal scroll here to avoid overflow */
-    overflow-x: visible;
+@media (max-width: 720px) {
+  :root {
+    font-size: 15px;
+  }
+  .landing-container {
+    padding: 24px 16px;
+  }
+  .landing-columns {
+    grid-template-columns: 1fr;
+  }
+  .room-list {
+    padding: 16px;
+  }
+  .room-list li a {
+    font-size: 0.98rem;
   }
 }
 
@@ -578,51 +578,37 @@ small {
   :root {
     font-size: 14px;
   }
-
-  /* hide decorative emoji in the H1 on small screens to tidy the header */
   .h1-emoji {
-    display: none !important;
+    display: none;
   }
-
-  /* give the page more usable width on tiny screens */
   .app-container {
-    margin: 8px;
-    padding: 10px;
+    margin: 10px;
+    padding: 16px;
   }
-  .layout {
-    gap: 8px;
-  }
-
-  /* compact sidebar but keep available horizontally if needed */
   .external-container {
-    padding: 8px;
-    max-height: 140px;
-    overflow-x: auto;
+    padding: 18px;
+    max-height: none;
   }
   .fc-external {
-    padding: 6px 8px;
-    font-size: 13px;
-    white-space: nowrap;
+    padding: 10px 12px;
+    font-size: 0.92rem;
+    white-space: normal;
   }
-
-  /* reduce calendar padding and allow horizontal scrolling instead of shrinking columns */
   .calendar-container {
-    padding: 6px;
+    padding: 10px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
   .calendar-container .fc .fc-scrollgrid {
-    min-width: 0; /* allow grid to shrink; horizontal scroll will appear only if content requires it */
+    min-width: 0;
     max-width: 100%;
   }
-
-  /* stack weekday + date but keep each part unbroken */
   .calendar-container .fc .fc-col-header-cell-cushion {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     gap: 2px !important;
-    white-space: normal !important; /* allow compact wrapping */
+    white-space: normal !important;
     padding: 2px 6px !important;
     font-size: 11px !important;
     line-height: 1 !important;
@@ -635,49 +621,45 @@ small {
   .calendar-container .fc .fc-col-header-cell {
     padding: 2px 4px !important;
   }
-
   .modal {
-    padding: 12px;
-    min-width: 280px;
+    padding: 16px;
+    min-width: 100%;
   }
   .app-footer {
-    font-size: 12px;
+    font-size: 0.92rem;
   }
 }
 
 @media (max-width: 380px) {
-  /* compact, horizontally-scrollable sidebar for the smallest phones.
-     moved out of nested media and widened slightly to avoid a 361px gap. */
   .external-container {
     display: block;
     width: 100%;
-    max-height: 80px;
-    min-height: 48px;
-    padding: 6px 4px;
+    max-height: 96px;
+    min-height: 56px;
+    padding: 8px 6px;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
-    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.03);
-    border-radius: 6px;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+    border-radius: 18px;
   }
   .external-container h3 {
     display: inline-block;
     margin-right: 8px;
     vertical-align: middle;
-    font-size: 14px;
+    font-size: 0.95rem;
   }
-  .external-container .fc-external {
+  .fc-external {
     display: inline-flex !important;
     vertical-align: middle;
     margin: 4px 8px 4px 0;
-    min-width: 100px;
-    padding: 6px 10px;
+    min-width: 110px;
+    padding: 8px 10px;
     white-space: nowrap;
-    touch-action: none;
   }
   .app-container {
-    margin: 6px;
-    padding: 8px;
+    margin: 8px;
+    padding: 12px;
   }
   .calendar-container .fc .fc-scrollgrid {
     min-width: 0;
