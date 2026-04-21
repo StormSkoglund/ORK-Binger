@@ -802,13 +802,14 @@ html.is-dragging, body.is-dragging {
   gap: 8px;
   flex-wrap: wrap;
 }
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .modal-actions {
     flex-direction: column;
     align-items: stretch;
   }
   .modal-actions-right {
-    justify-content: stretch;
+    display: flex;
+    gap: 8px;
   }
   .modal-actions-right .btn {
     flex: 1;
@@ -842,7 +843,7 @@ html.is-dragging, body.is-dragging {
   gap: 12px;
   margin-top: 16px;
 }
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .reschedule {
     grid-template-columns: 1fr;
   }
