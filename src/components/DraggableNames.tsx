@@ -5,9 +5,25 @@ import { getCalendarId } from "../lib/calendar";
 // name lists for each room/calendar
 const NAME_MAP: Record<string, string[]> = {
   // Søfteland is the main venue with an established weekly lineup
-  musikkbinge1: ["Storm Valley", "E39", "De Navnløse", "The Admins"],
-  musikkbinge2: ["Sick Fade", "Grim Spencer", "Henrik Furuvik", "The Admins"],
-  musikkbinge3: ["Henrik Furuvik", "The Admins"],
+  musikkbinge1: [
+    "Storm Valley",
+    "E39",
+    "De Navnløse",
+    "The Admins",
+    "Maria Sophie Hellevang-Jensen",
+  ],
+  musikkbinge2: [
+    "Sick Fade",
+    "Grim Spencer",
+    "Henrik Furuvik",
+    "The Admins",
+    "Maria Sophie Hellevang-Jensen",
+  ],
+  musikkbinge3: [
+    "Henrik Furuvik",
+    "The Admins",
+    "Maria Sophie Hellevang-Jensen",
+  ],
 };
 
 export default function DraggableNames() {
