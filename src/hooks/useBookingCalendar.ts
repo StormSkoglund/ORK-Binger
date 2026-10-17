@@ -185,10 +185,10 @@ export function useBookingCalendar() {
         },
         { names: "E39", weekday: 2, startTime: "18:00", endTime: "24:00" },
         {
-          names: "De Navnløse",
-          weekday: 0,
-          startTime: "17:00",
-          endTime: "20:00",
+          names: "Hehrako",
+          weekday: 5,
+          startTime: "18:30",
+          endTime: "21:30",
         },
       ];
     }

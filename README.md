@@ -16,6 +16,8 @@ Simple calendar where users drag names onto dates and bookings are saved to Supa
    # specify calendar explicitly
    node scripts/seed-weekly.mjs --calendar mycalendar --weeks 12
    ```
+   Søfteland (`musikkbinge1`) includes Hehrako every Friday from 18:30 to
+   21:30 in this schedule.
 3. Run:
    - npm install
    - npm run dev
