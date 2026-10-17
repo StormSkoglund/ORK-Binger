@@ -8,22 +8,18 @@ const NAME_MAP: Record<string, string[]> = {
   musikkbinge1: [
     "Storm Valley",
     "E39",
-    "De Navnløse",
+    "Hehrako",
     "The Admins",
-    "Maria Sophie Hellevang-Jensen",
+    "Maria Sophie HJ",
   ],
   musikkbinge2: [
     "Sick Fade",
     "Grim Spencer",
     "Henrik Furuvik",
     "The Admins",
-    "Maria Sophie Hellevang-Jensen",
+    "Maria Sophie HJ",
   ],
-  musikkbinge3: [
-    "Henrik Furuvik",
-    "The Admins",
-    "Maria Sophie Hellevang-Jensen",
-  ],
+  musikkbinge3: ["Henrik Furuvik", "The Admins", "Maria Sophie HJ"],
 };
 
 export default function DraggableNames() {

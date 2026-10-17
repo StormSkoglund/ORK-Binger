@@ -70,11 +70,11 @@ function getWeeklyTemplates(calendarId) {
       }, // Monday
       { names: "E39", weekday: 2, startTime: "18:00", endTime: "24:00" }, // Tuesday
       {
-        names: "De Navnløse",
-        weekday: 0,
-        startTime: "17:00",
-        endTime: "20:00",
-      }, // Sunday
+        names: "Hehrako",
+        weekday: 5,
+        startTime: "18:30",
+        endTime: "21:30",
+      }, // Friday
     ];
   }
 

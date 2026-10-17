@@ -229,11 +229,11 @@ export default function Calendar() {
         }, // Monday
         { names: "E39", weekday: 2, startTime: "18:00", endTime: "24:00" }, // Tuesday
         {
-          names: "De Navnløse",
-          weekday: 0,
-          startTime: "17:00",
-          endTime: "20:00",
-        }, // Sunday
+          names: "Hehrako",
+          weekday: 5,
+          startTime: "18:30",
+          endTime: "21:30",
+        }, // Friday
       ];
     }
 
@@ -324,7 +324,7 @@ export default function Calendar() {
     let failed = 0;
 
     // Remove existing seeded bookings in the target date range before reseeding.
-    // This ensures that stale entries (like old Thursday De Navnløse in musikkbinge1)
+    // This ensures stale entries from an earlier weekly schedule are cleared.
     // are not left behind after changing the template.
     try {
       const endDate = new Date(today);
