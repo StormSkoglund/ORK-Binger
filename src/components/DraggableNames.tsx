@@ -20,7 +20,8 @@ const NAME_MAP: Record<string, string[]> = {
     "Maria Sophie HJ",
   ],
   musikkbinge3: ["Henrik Furuvik", "The Admins", "Maria Sophie HJ"],
-};
+    musikkbinge4: ["Maria Sophie HJ"],
+  };
 
 export default function DraggableNames() {
   const containerRef = useRef<HTMLDivElement | null>(null);

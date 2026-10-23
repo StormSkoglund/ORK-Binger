@@ -30,6 +30,7 @@ export default function App() {
       if (num === 1) appTitle = "Musikkbingen Søfteland";
       else if (num === 2) appTitle = "Musikkbingen Os Sentrum";
       else if (num === 3) appTitle = "Musikkbingen Nore Neset";
+      else if (num === 4) appTitle = "Musikkbingen Fusa";
       else appTitle = `Musikkbinge ${match[1]}`;
     } else if (!/default/i.test(calendarId)) {
       // if the id is something else, just use it verbatim (capitalized)
