@@ -18,6 +18,9 @@ export default function Landing() {
           <li>
             <a href="/musikkbinge3">Musikkbingen Nore Neset</a>
           </li>
+                      <li>
+                        <a href="/musikkbinge4">Musikkbingen Fusa</a>
+                      </li>
         </ul>
 
         <NewsFeed />

@@ -16,7 +16,12 @@ type FeedItem = {
   message: string;
 };
 
-const CALENDAR_IDS = ["musikkbinge1", "musikkbinge2", "musikkbinge3"] as const;
+const CALENDAR_IDS = [
+  "musikkbinge1",
+  "musikkbinge2",
+  "musikkbinge3",
+  "musikkbinge4",
+] as const;
 
 function calendarLabel(calendarId: string) {
   const match = calendarId.match(/^musikkbinge(\d+)$/i);

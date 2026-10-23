@@ -79,7 +79,7 @@ published folder so that accessing `/admin` works correctly.
 ## Behavior
 
 - Landing page now provides links for multiple rooms/call them "musikkbinge".
-  visit `/musikkbinge1`, `/musikkbinge2`, or `/musikkbinge3` (or use
+  visit `/musikkbinge1`, `/musikkbinge2`, `/musikkbinge3`, or `/musikkbinge4` (Fusa) (or use
   `?cal=musikkbinge1` query parameter) to open a specific calendar.
 
 - Drag a name from the left column onto a date to create a booking.
